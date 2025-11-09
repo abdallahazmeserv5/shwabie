@@ -1,5 +1,11 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
+const PropertyMap = dynamic(() => import("./property-map-client"), {
+  ssr: false, // <-- important
+});
+
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
@@ -14,7 +20,7 @@ const markerIcon = new L.Icon({
   iconAnchor: [12, 41],
 });
 
-const LocationMap = () => {
+const LocationMap = ({ h = 400 }: { h?: number }) => {
   const position: [number, number] = [30.0444, 31.2357];
 
   return (
@@ -24,7 +30,8 @@ const LocationMap = () => {
           center={position}
           zoom={16}
           scrollWheelZoom={false}
-          className="h-[400px] w-full"
+          className={` w-full`}
+          style={{ height: h + "px" }}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

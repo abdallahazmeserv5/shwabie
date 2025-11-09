@@ -2,6 +2,8 @@
 
 import ImageFallback from "@/components/image-fallback";
 import PropertyDetails from "./property-details";
+import PropertyImages from "./property-images";
+import { cn } from "@/lib/utils";
 
 export default function SingleDetailsProperty({
   secondary = false,
@@ -9,7 +11,7 @@ export default function SingleDetailsProperty({
   secondary?: boolean;
 }) {
   return (
-    <section className="pt-10 2xl:pt-28 container px-4 mx-auto">
+    <section className="pt-5 container px-4 mx-auto">
       {/* Triangle Background */}
       <div className="relative flex flex-col items-center justify-end mb-0 pb-0 z-0">
         <div className="absolute inset-0 w-full h-full flex items-end justify-center pointer-events-none -z-10">
@@ -23,7 +25,12 @@ export default function SingleDetailsProperty({
           </div>
         </div>
 
-        <div className="relative z-20 text-center pb-20">
+        <div
+          className={cn(
+            "relative z-20 text-center pt-10",
+            secondary ? "pb-5" : "pb-20"
+          )}
+        >
           {/* <div className=" flex items-center">
             {links.map((link) => {
               return (
@@ -46,20 +53,15 @@ export default function SingleDetailsProperty({
       </div>
 
       {/* details */}
-      <div className="flex items-center gap-4 ">
+      <div className="flex flex-col md:flex-row gap-4 mt-5 relative ">
         {/* image of property */}
-        <div className="relative flex-1 border-2 border-gray-200 rounded-md h-[783px]">
-          <div className="relative h-full w-[80%]">
-            <ImageFallback
-              src={"/property-image.webp"}
-              alt="Properties"
-              fill
-              className="object-contain absolute bottom-0 start-0"
-            />
-          </div>
+        <div className="z-10 flex-1">
+          <PropertyImages />
         </div>
         {/* details */}
-        <PropertyDetails />
+        <div className="z-0 flex-1">
+          <PropertyDetails />
+        </div>
       </div>
     </section>
   );
