@@ -1,12 +1,20 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
-import { motion } from "framer-motion";
-import { DoorOpen, Heart, MapPin, Maximize2 } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
 import ImageFallback from "./image-fallback";
-import { Separator } from "./ui/separator";
+import PropertyFilter from "./property-filter";
+
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import { PropertyCard } from "@/features/properties/property-card";
+import Autoplay from "embla-carousel-autoplay";
+import { useLocale } from "next-intl";
+import * as React from "react";
+import Link from "next/link";
+import PropertiesPagnation from "@/features/properties/properties-pagnation";
 
 type Property = {
   id: number;
@@ -18,7 +26,7 @@ type Property = {
   location: string;
 };
 
-const properties: Property[] = [
+export const properties: Property[] = [
   {
     id: 1,
     image: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4",
@@ -93,23 +101,17 @@ const properties: Property[] = [
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-export default function Properties() {
+export default function Properties({
+  secondary = false,
+}: {
+  secondary?: boolean;
+}) {
+  const links = [
+    { href: "/", name: "الرئيسية" },
+    { href: "/properties", name: "العقارات" },
+  ];
   const [favorites, setFavorites] = useState<number[]>([]);
+  const dir = useLocale() === "ar" ? "rtl" : "ltr";
 
   const toggleFavorite = (id: number) => {
     setFavorites((prev) =>
@@ -117,119 +119,117 @@ export default function Properties() {
     );
   };
 
-  return (
-    <section className="py-20 container px-4 mx-auto">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative flex flex-col items-center justify-end mb-0 pb-0">
-          {/* Triangle Image Background */}
-          <div className="absolute inset-0 w-full h-full flex items-end justify-center pointer-events-none">
-            <div className="relative w-full h-[295px]">
-              <Image
-                src="/home/triangle.png"
-                alt="Triangle Background"
-                fill
-                className="object-contain object-bottom"
-                priority
-              />
-            </div>
-          </div>
+  // Split properties into 2 rows of 4
+  const firstRow = properties.slice(0, 4);
+  const secondRow = properties.slice(4);
 
-          <div className="relative z-10 text-center py-20">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              <span className="text-primary mx-2 inline-block">عقارات</span>{" "}
-              منتقاة بعناية
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
-              اختر من بين مئات العقارات المتاحة في أفضل المواقع
-            </p>
+  // Embla autoplay plugin (different directions)
+  const firstPluginForward = React.useRef(
+    Autoplay({
+      delay: 2500,
+      stopOnInteraction: false,
+      stopOnMouseEnter: false,
+    })
+  );
+  const secondPluginForward = React.useRef(
+    Autoplay({
+      delay: 2500,
+      stopOnInteraction: false,
+      stopOnMouseEnter: false,
+    })
+  );
+
+  return (
+    <section className="pt-10 2xl:pt-28 container px-4 mx-auto">
+      <div className="relative flex flex-col items-center justify-end mb-0 pb-0 z-0">
+        {/* Triangle Background */}
+        <div className="absolute inset-0 w-full h-full flex items-end justify-center pointer-events-none -z-10">
+          <div className="relative w-full h-[295px]">
+            <ImageFallback
+              src="/home/triangle.png"
+              alt="Triangle Background"
+              fill
+              className="object-contain object-bottom"
+            />
           </div>
         </div>
 
-        {/* Motion Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 bg-[#e8fdf5] p-8 rounded-t-[100px] -mt-12"
+        <div className="relative z-20 text-center pb-20">
+          {/* <div className=" flex items-center">
+            {links.map((link) => {
+              return (
+                <div className="gap-1">
+                  <Link href={link.href}>{link.name}</Link>
+                </div>
+              );
+            })}
+          </div> */}
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <span className="text-primary mx-2 inline-block">عقارات</span>{" "}
+            منتقاة بعناية
+          </h2>
+          {!secondary && (
+            <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
+              اختر من بين مئات العقارات المتاحة في أفضل المواقع
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="bg-[#e8fdf5] p-4 -mt-12 relative z-10">
+        <PropertyFilter />
+        {/* ===== Row 1 Carousel ===== */}
+        <Carousel
+          opts={{
+            align: "center",
+            loop: true,
+            direction: dir,
+          }}
+          plugins={[firstPluginForward.current]}
+          className="mt-6"
         >
-          {properties.map((property) => (
-            <motion.div key={property.id} variants={cardVariants}>
-              <Card className="hover:shadow-xl transition duration-300 border-0 rounded-2xl ps-2 bg-white">
-                {/* image  */}
-                <div className="relative h-48 w-full rounded-t-2xl overflow-hidden">
-                  <ImageFallback
-                    src={property.image}
-                    alt={property.location}
-                    fill
-                    className="object-cover"
-                  />
-
-                  <button
-                    onClick={() => toggleFavorite(property.id)}
-                    className="absolute cursor-pointer top-3 right-3 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition"
-                  >
-                    <Heart
-                      size={20}
-                      className={
-                        favorites.includes(property.id)
-                          ? "fill-red-500 text-red-500"
-                          : "text-gray-400"
-                      }
-                    />
-                  </button>
-
-                  <div className="w-[104px] h-10 rounded-2xl absolute -bottom-1 -left-2">
-                    <ImageFallback
-                      src="/home/bg-badge.png"
-                      alt="Background"
-                      className="w-full h-full object-contain"
-                      fill
-                    />
-
-                    <span className="text-white absolute top-1 -translate-x-1/3 left-1/2 text-sm font-bold z-10">
-                      مميزة
-                    </span>
-                  </div>
-                </div>
-                {/* text */}
-                <div className="p-2 space-y-3">
-                  <h3 className="text-[#000929] font-bold">شقة فاخرة في جدة</h3>
-                  <p className="font-bold text-lg text-gray-900">
-                    <span className="text-[#808494] font-normal mx-1">
-                      الشهر /
-                    </span>
-                    <span className="text-primary mx-1">{property.price}</span>
-                    ريال
-                  </p>
-
-                  <div className="flex items-center gap-1 text-muted-foreground">
-                    <MapPin size={16} />
-                    <span className="text-sm">{property.location}</span>
-                  </div>
-
-                  <Separator className="bg-muted" />
-
-                  <div className="flex items-center justify-between gap-4 text-sm text-gray-600">
-                    <div className="flex items-center gap-1">
-                      <DoorOpen className="text-primary" size={16} />
-                      <span>{property.beds} غرف</span>
-                    </div>
-
-                    <div className="flex items-center gap-1">
-                      <Maximize2 className="text-primary" size={16} />
-                      <span>{property.area}</span>
-                    </div>
-
-                    <div className="flex items-center gap-1">
-                      <DoorOpen className="text-primary" size={16} />
-                      <span>{property.beds} حمام</span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
+          <CarouselContent className="-ml-4 py-2">
+            {firstRow.map((property) => (
+              <CarouselItem
+                key={property.id}
+                className="pl-4 basis-3/4 sm:basis-1/2 md:basis-1/3 xl:basis-1/4"
+              >
+                <PropertyCard
+                  property={property}
+                  isFavorite={favorites.includes(property.id)}
+                  toggleFavorite={toggleFavorite}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+        {/* ===== Row 2 Carousel (opposite direction) ===== */}
+        <Carousel
+          dir="ltr"
+          opts={{
+            align: "center",
+            loop: true,
+            direction: "ltr",
+          }}
+          plugins={[secondPluginForward.current]}
+          className="mt-8"
+        >
+          <CarouselContent className="-ml-4 py-2 text-end">
+            {secondRow.map((property) => (
+              <CarouselItem
+                key={property.id}
+                className="pl-4 basis-3/4 sm:basis-1/2 md:basis-1/3 xl:basis-1/4"
+              >
+                <PropertyCard
+                  property={property}
+                  isFavorite={favorites.includes(property.id)}
+                  toggleFavorite={toggleFavorite}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+        {secondary && <PropertiesPagnation />}
       </div>
     </section>
   );

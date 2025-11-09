@@ -1,29 +1,61 @@
-import { Button } from "@/components/ui/button"
+"use client";
+
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import ImageFallback from "./image-fallback";
 
 export default function CTA() {
   return (
-    <section className="py-20 bg-emerald-600">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Content */}
-          <div className="text-white space-y-6">
-            <h2 className="text-4xl font-bold">لم تجد حلمك بعد؟</h2>
-            <p className="text-emerald-100 text-lg leading-relaxed">
-              تواصل معنا الآن وسيساعدك فريقنا المتخصص في إيجاد العقار الذي يناسبك تماماً
-            </p>
-            <Button className="bg-white text-emerald-600 hover:bg-emerald-50 px-8 rounded-full font-semibold">
-              تواصل معنا
+    <motion.section
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      viewport={{ once: true }}
+      className="bg-primary rounded-2xl pt-10  container mx-auto pe-6 py-5 sm:py-0 "
+    >
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-8  ">
+        {/* Image Section */}
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="flex-1 flex justify-center lg:justify-start"
+        >
+          <ImageFallback
+            src="/building-image.webp"
+            alt="Illustration"
+            width={400}
+            height={200}
+            className="object-contain w-[250px] sm:w-[300px] md:w-[400px] h-auto"
+          />
+        </motion.div>
+
+        {/* Text Section */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="text-center lg:text-right text-white space-y-4 flex-1"
+        >
+          <h2 className="text-2xl md:text-3xl font-bold">
+            لم تجد عقارك المناسب بعد؟
+          </h2>
+          <p className="text-sm md:text-base opacity-90 leading-relaxed">
+            يمكنك التصفح والاستفسار عن كل جديد من طرق التواصل
+          </p>
+          <div className="flex justify-center lg:justify-start">
+            <Button
+              variant="outline"
+              className="bg-white hover:text-primary text-black hover:bg-gray-100 rounded-md text-sm md:text-base px-5 py-2 transition-all duration-200"
+            >
+              اتصل بنا ↗
             </Button>
           </div>
-
-          {/* Illustration */}
-          <div className="flex justify-center">
-            <div className="w-full h-64 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-3xl flex items-center justify-center">
-              <span className="text-8xl">🏢</span>
-            </div>
-          </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
-  )
+    </motion.section>
+  );
 }

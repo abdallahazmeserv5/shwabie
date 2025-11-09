@@ -47,7 +47,7 @@ export function Header() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="bg-[linear-gradient(135deg,#12b271_0%,#0b291c_100%)] text-white shadow-lg backdrop-blur-md"
+      className="bg-[#065f46] text-white shadow-lg backdrop-blur-md"
     >
       <div className="container mx-auto flex items-center justify-between py-3 px-4">
         {/* Logo */}

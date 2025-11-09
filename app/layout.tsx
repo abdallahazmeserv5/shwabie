@@ -1,13 +1,13 @@
-import type React from "react";
-import type { Metadata } from "next";
-import { Alexandria } from "next/font/google"; // <-- import Alexandra
-import { Analytics } from "@vercel/analytics/next";
-import "./globals.css";
+import Footer from "@/features/footer/components/footer";
 import { Header } from "@/features/header/components/header";
+import "leaflet/dist/leaflet.css";
+import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
+import { Alexandria } from "next/font/google";
+import type React from "react";
+import "./globals.css";
 
-// Load Alexandra font
 const _alexandra = Alexandria({
   subsets: ["latin", "arabic"],
   weight: ["400", "700"],
@@ -49,6 +49,7 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <Header />
           {children}
+          <Footer />
         </NextIntlClientProvider>
       </body>
     </html>

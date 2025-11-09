@@ -5,9 +5,27 @@ import ImageFallback from "./image-fallback";
 import { Button } from "./ui/button";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import * as React from "react";
+import Autoplay from "embla-carousel-autoplay";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { useLocale } from "next-intl";
 
 export default function Features() {
   const t = useTranslations();
+  const dir = useLocale() === "ar" ? "rtl" : "ltr";
+  const plugin = React.useRef(
+    Autoplay({
+      delay: 2500,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+    })
+  );
 
   const features = [
     {
@@ -33,10 +51,18 @@ export default function Features() {
   ];
 
   return (
-    <section className="py-16 bg-white container px-4 mx-auto">
-      <div className="flex items-center flex-col md:flex-row gap-10">
-        {/* Right Highlight Card */}
-        <Card className="relative p-10 bg-emerald-50 rounded-3xl shadow-none flex-1 overflow-hidden h-[500px] text-right">
+    <section className="py-8 sm:py-16 bg-white container px-4 mx-auto border-2 border-gray-200 rounded-md">
+      <div className="flex items-center flex-col md:flex-row  sm:gap-10">
+        {/* ===== Title for Small Screen ===== */}
+        <h2 className="text-3xl font-bold text-gray-900 mb-2 flex sm:hidden text-nowrap flex-wrap text-center">
+          {t("features_title")}
+          <span className="text-2xl font-bold text-emerald-700 mb-4 ms-2">
+            {t("features_subtitle")}
+          </span>
+        </h2>
+
+        {/* ===== Right Highlight Card (Desktop) ===== */}
+        <Card className="relative p-10 hidden sm:block bg-emerald-50 rounded-3xl shadow-none flex-1 overflow-hidden h-[500px] text-right">
           <div className="absolute inset-0">
             <ImageFallback
               src="/home/home-image-bg.webp"
@@ -63,9 +89,11 @@ export default function Features() {
           </div>
         </Card>
 
-        {/* Features List */}
+        {/* ===== Features Section ===== */}
+
+        {/* For larger screens → Grid */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 gap-6 flex-2 w-full"
+          className="hidden md:grid grid-cols-2 gap-6 flex-2 w-full"
           initial="hidden"
           animate="show"
           variants={{
@@ -82,7 +110,7 @@ export default function Features() {
               }}
             >
               <Card className="p-6 border rounded-xl shadow-sm hover:shadow-md transition bg-white text-right flex gap-4">
-                <div className="flex  sm:flex-col items-center gap-2">
+                <div className="flex sm:flex-col items-center gap-2">
                   <div className="size-16 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
                     <ImageFallback
                       alt={feature.title}
@@ -105,6 +133,57 @@ export default function Features() {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* ===== Carousel for Mobile & Tablet ===== */}
+        <div className="w-full md:hidden">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+              direction: dir,
+            }}
+            plugins={[plugin.current]}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4 py-4">
+              {features.map((feature, index) => (
+                <CarouselItem
+                  key={index}
+                  className="pl-4 basis-full sm:basis-1/2"
+                >
+                  <Card className="p-6 border rounded-xl shadow-sm hover:shadow-md transition bg-white text-right flex gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="size-16 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
+                        <ImageFallback
+                          alt={feature.title}
+                          src={feature.icon}
+                          width={64}
+                          height={64}
+                          className="w-16 h-16"
+                        />
+                      </div>
+
+                      <div>
+                        <h3 className="font-semibold text-gray-900 mb-2 text-lg">
+                          {feature.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 leading-relaxed">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+
+            {/* Navigation */}
+            <div className="flex justify-center gap-2">
+              <CarouselPrevious className="relative translate-y-0 border border-gray-300 hover:bg-emerald-600 hover:text-white transition" />
+              <CarouselNext className="relative translate-y-0 border border-gray-300 hover:bg-emerald-600 hover:text-white transition" />
+            </div>
+          </Carousel>
+        </div>
       </div>
     </section>
   );

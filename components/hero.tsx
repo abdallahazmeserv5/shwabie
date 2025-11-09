@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
@@ -6,13 +8,46 @@ import ImageFallback from "./image-fallback";
 
 export default function Hero() {
   const t = useTranslations();
+  const dots = Array.from({ length: 10 });
 
   return (
-    <section className=" border-gray-100 bg-primary  text-white overflow-hidden h-[calc(100vh-83.75px)] md:h-[calc(100vh-153px)]">
-      <div className="flex flex-col-reverse lg:flex-row items-center justify-center h-full">
-        {/* Image Section */}
+    <section className="relative overflow-hidden h-[calc(80vh-83.75px)] md:h-[calc(100vh-124px)] text-white">
+      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,#065f46,#10b981,#6ee7b7)] bg-size-[200%_200%] animate-[gradientShift_10s_ease_infinite]" />
+
+      {/* ✨ Floating Dots */}
+      <div className="absolute inset-0 overflow-hidden">
+        {dots.map((_, i) => (
+          <motion.span
+            key={i}
+            className="absolute w-3 h-3 rounded-full bg-emerald-300/40 blur-[1px]"
+            initial={{
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight,
+              scale: Math.random() * 0.8 + 0.4,
+            }}
+            animate={{
+              y: [null, Math.random() * window.innerHeight],
+              x: [null, Math.random() * window.innerWidth],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 12 + Math.random() * 8,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Overlay for better contrast */}
+      <div className="absolute inset-0 bg-black/20" />
+
+      {/* Content */}
+      <div className="relative flex flex-col-reverse lg:flex-row items-center justify-center h-full">
+        {/* 🧍 Image */}
         <motion.div
-          className="relative flex-1 h-80 lg:h-[500px] 2xl:h-[795px]"
+          className="relative flex-1 w-full h-[350px] sm:h-[400px] lg:h-[500px] 2xl:h-[795px] hidden lg:block"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
@@ -25,7 +60,7 @@ export default function Hero() {
           />
         </motion.div>
 
-        {/* Content */}
+        {/* 📝 Text */}
         <motion.div
           className="space-y-6 z-10 flex-1 text-center lg:text-right max-w-6xl px-4 pt-10"
           initial={{ opacity: 0, x: -50 }}
@@ -41,17 +76,11 @@ export default function Hero() {
           <p className="text-emerald-50 text-lg leading-relaxed max-w-lg mx-auto lg:mx-0">
             {t("description")}
           </p>
-          <div className="flex items-center justify-center lg:justify-start gap-3 pt-4">
-            <Button className="bg-white text-emerald-600 hover:bg-emerald-50 rounded-full px-8 font-semibold">
-              {t("startNow")}
-            </Button>
-            <motion.button
-              className="flex items-center gap-2 text-white hover:text-emerald-100 transition"
-              whileHover={{ x: 5 }}
-            >
+          <div className="flex gap-2 items-center">
+            <Button className=" bg-transparent hover:bg-primary text-white border border-white flex items-center gap-2  px-8! py-6! rounded-md   transition">
               <span>{t("browseProperties")}</span>
-              <ChevronLeft size={20} />
-            </motion.button>
+            </Button>
+            <ChevronLeft className=" " size={20} />
           </div>
         </motion.div>
       </div>
