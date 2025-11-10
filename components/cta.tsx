@@ -4,21 +4,27 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import ImageFallback from "./image-fallback";
+import Link from "next/link";
+import { SiteSettingsQuery } from "@/features/shared/query-options";
+import { useQuery } from "@tanstack/react-query";
 
 export default function CTA() {
+  const { data } = useQuery(SiteSettingsQuery);
+
+  const phoneNumber = data?.data.site_phone;
   return (
     <motion.section
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       viewport={{ once: true }}
-      className="bg-primary rounded-2xl pt-10  container mx-auto pe-6 py-5 sm:py-0 "
+      className="bg-primary rounded-2xl pt-10 container mx-auto pe-6 py-5 sm:py-0"
     >
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-8  ">
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
         {/* Image Section */}
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 50 }} // 👈 from below
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
           className="flex-1 flex justify-center lg:justify-start"
@@ -34,8 +40,8 @@ export default function CTA() {
 
         {/* Text Section */}
         <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 50 }} // 👈 also from below
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true }}
           className="text-center lg:text-right text-white space-y-4 flex-1"
@@ -50,8 +56,15 @@ export default function CTA() {
             <Button
               variant="outline"
               className="bg-white hover:text-primary text-black hover:bg-gray-100 rounded-md text-sm md:text-base px-5 py-2 transition-all duration-200"
+              asChild
             >
-              اتصل بنا ↗
+              <Link
+                href={`https://wa.me/${phoneNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                اتصل بنا ↗
+              </Link>
             </Button>
           </div>
         </motion.div>

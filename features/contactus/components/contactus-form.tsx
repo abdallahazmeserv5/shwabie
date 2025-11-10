@@ -11,13 +11,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import LocationMap from "@/features/properties/property-location";
+import LocationMap from "@/features/properties/components/property-location";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { motion } from "framer-motion";
+import Triangle from "@/features/shared/components/triangle";
+import Breadcrumb from "@/components/breadcrumb";
 
 // ✅ Define schema with zod
 const formSchema = z.object({
@@ -34,9 +36,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function FontactusForm() {
-  const [open, setOpen] = useState(false);
-
+export default function ContactusForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -63,7 +63,6 @@ export default function FontactusForm() {
     )}`;
     window.open(whatsappUrl, "_blank");
 
-    setOpen(false);
     form.reset();
   };
 
@@ -75,30 +74,19 @@ export default function FontactusForm() {
   return (
     <section className="pt-8 container px-4 mx-auto  ">
       {/* Triangle Background */}
-      <motion.div
-        className="relative flex flex-col items-center justify-end mb-0 pb-0 z-0"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true }}
-      >
-        <div className="absolute inset-0 w-full h-full flex items-end justify-center pointer-events-none -z-10">
-          <div className="relative w-full h-[295px]">
-            <ImageFallback
-              src="/home/triangle.png"
-              alt="Triangle Background"
-              fill
-              className="object-contain object-bottom"
-            />
-          </div>
-        </div>
-
-        <div className={cn("relative z-20 text-center pt-10 pb-20")}>
+      <Triangle>
+        <div className="relative z-20 text-center flex flex-col items-center gap-5 pb-20">
+          <Breadcrumb
+            items={[
+              { title: "الرئيسية", href: "/" },
+              { title: "تواصل معنا", href: "/contactus" },
+            ]}
+          />{" "}
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">
             إتصل بنا
           </h2>
         </div>
-      </motion.div>
+      </Triangle>
 
       <motion.div
         className="rounded-none overflow-y-auto bg-white border border-gray-200 py-20"

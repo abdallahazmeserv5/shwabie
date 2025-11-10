@@ -9,12 +9,18 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { PropertyCard } from "@/features/properties/property-card";
+import { PropertyCard } from "@/features/properties/components/property-card";
 import Autoplay from "embla-carousel-autoplay";
 import { useLocale } from "next-intl";
 import * as React from "react";
 import Link from "next/link";
-import PropertiesPagnation from "@/features/properties/properties-pagnation";
+import PropertiesPagnation from "@/features/properties/components/pagnation";
+import Pagnation from "@/features/properties/components/pagnation";
+import Triangle from "@/features/shared/components/triangle";
+import Breadcrumb from "./breadcrumb";
+import PropertyFilterForm from "@/features/properties/components/property-filter-form";
+import { useQuery } from "@tanstack/react-query";
+import { PropertyDataQuery } from "@/features/properties/query-options";
 
 type Property = {
   id: number;
@@ -106,22 +112,21 @@ export default function Properties({
 }: {
   secondary?: boolean;
 }) {
-  const links = [
-    { href: "/", name: "الرئيسية" },
-    { href: "/properties", name: "العقارات" },
-  ];
   const [favorites, setFavorites] = useState<number[]>([]);
   const dir = useLocale() === "ar" ? "rtl" : "ltr";
 
+  const { data } = useQuery(PropertyDataQuery);
+
+  const properties = data?.data || [];
   const toggleFavorite = (id: number) => {
     setFavorites((prev) =>
       prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
     );
   };
 
-  // Split properties into 2 rows of 4
-  const firstRow = properties.slice(0, 4);
-  const secondRow = properties.slice(4);
+  const half = Math.round((data?.data.length || 0) / 2);
+  const firstRow = properties.slice(0, half);
+  const secondRow = properties.slice(half);
 
   // Embla autoplay plugin (different directions)
   const firstPluginForward = React.useRef(
@@ -141,31 +146,16 @@ export default function Properties({
 
   return (
     <section className="pt-10 2xl:pt-28 container px-4 mx-auto">
-      <div className="relative flex flex-col items-center justify-end mb-0 pb-0 z-0">
-        {/* Triangle Background */}
-        <div className="absolute inset-0 w-full h-full flex items-end justify-center pointer-events-none -z-10">
-          <div className="relative w-full h-[295px]">
-            <ImageFallback
-              src="/home/triangle.png"
-              alt="Triangle Background"
-              fill
-              className="object-contain object-bottom"
-            />
-          </div>
-        </div>
-
-        <div className="relative z-20 text-center pb-20">
-          {/* <div className=" flex items-center">
-            {links.map((link) => {
-              return (
-                <div className="gap-1">
-                  <Link href={link.href}>{link.name}</Link>
-                </div>
-              );
-            })}
-          </div> */}
+      <Triangle>
+        <div className="relative z-20 text-center flex flex-col items-center gap-5 pb-20">
+          <Breadcrumb
+            items={[
+              { title: "الرئيسية", href: "/" },
+              { title: "العقارات", href: "/properties" },
+            ]}
+          />
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            <span className="text-primary mx-2 inline-block">عقارات</span>{" "}
+            <span className="text-primary mx-2 inline-block">عقارات</span>
             منتقاة بعناية
           </h2>
           {!secondary && (
@@ -174,10 +164,11 @@ export default function Properties({
             </p>
           )}
         </div>
-      </div>
+      </Triangle>
 
       <div className="bg-[#e8fdf5] p-4 -mt-12 relative z-10">
         <PropertyFilter />
+        {secondary && <PropertyFilterForm />}
         {/* ===== Row 1 Carousel ===== */}
         <Carousel
           opts={{
@@ -229,7 +220,13 @@ export default function Properties({
             ))}
           </CarouselContent>
         </Carousel>
-        {secondary && <PropertiesPagnation />}
+        {secondary && (
+          <Pagnation
+            currentPage={1}
+            lastPage={1}
+            onPageChange={() => console.log(" i got clicked")}
+          />
+        )}
       </div>
     </section>
   );

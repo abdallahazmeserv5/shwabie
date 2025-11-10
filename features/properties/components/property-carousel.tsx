@@ -10,7 +10,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { PropertyCard } from "@/features/properties/property-card";
+import { PropertyCard } from "@/features/properties/components/property-card";
 import Autoplay from "embla-carousel-autoplay";
 import { useLocale } from "next-intl";
 

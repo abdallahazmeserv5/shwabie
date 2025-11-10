@@ -1,6 +1,19 @@
+"use client";
 import Image, { ImageProps } from "next/image";
-import React from "react";
+import { useState } from "react";
 
-export default function ImageFallback({ ...props }: ImageProps) {
-  return <Image {...props} />;
+export default function ImageFallback({ src, ...props }: ImageProps) {
+  const fallbackUrl = "/fallback-image.webp";
+  const [imgSrc, setImgSrc] = useState(src || fallbackUrl);
+
+  return (
+    <Image
+      {...props}
+      src={imgSrc}
+      className="object-cover"
+      onError={() => {
+        setImgSrc(fallbackUrl);
+      }}
+    />
+  );
 }

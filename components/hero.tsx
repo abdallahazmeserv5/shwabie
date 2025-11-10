@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import ImageFallback from "./image-fallback";
+import Link from "next/link";
 
 export default function Hero() {
   const t = useTranslations();
@@ -21,13 +22,13 @@ export default function Hero() {
             key={i}
             className="absolute w-3 h-3 rounded-full bg-emerald-300/40 blur-[1px]"
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: Math.random() * (window?.innerWidth || 500),
+              y: Math.random() * (window?.innerWidth || 500),
               scale: Math.random() * 0.8 + 0.4,
             }}
             animate={{
-              y: [null, Math.random() * window.innerHeight],
-              x: [null, Math.random() * window.innerWidth],
+              y: [null, Math.random() * (window?.innerWidth || 500)],
+              x: [null, Math.random() * (window?.innerWidth || 500)],
               scale: [1, 1.2, 1],
             }}
             transition={{
@@ -40,12 +41,9 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* Overlay for better contrast */}
       <div className="absolute inset-0 bg-black/20" />
 
-      {/* Content */}
       <div className="relative flex flex-col-reverse lg:flex-row items-center justify-center h-full">
-        {/* 🧍 Image */}
         <motion.div
           className="relative flex-1 w-full h-[350px] sm:h-[400px] lg:h-[500px] 2xl:h-[795px] hidden lg:block"
           initial={{ opacity: 0, x: 50 }}
@@ -60,7 +58,6 @@ export default function Hero() {
           />
         </motion.div>
 
-        {/* 📝 Text */}
         <motion.div
           className="space-y-6 z-10 flex-1 text-center lg:text-right max-w-6xl px-4 pt-10"
           initial={{ opacity: 0, x: -50 }}
@@ -78,7 +75,9 @@ export default function Hero() {
           </p>
           <div className="flex gap-2 items-center">
             <Button className=" bg-transparent hover:bg-primary text-white border border-white flex items-center gap-2  px-8! py-6! rounded-md   transition">
-              <span>{t("browseProperties")}</span>
+              <Link href={"/properties"}>
+                <span>{t("browseProperties")}</span>
+              </Link>
             </Button>
             <ChevronLeft className=" " size={20} />
           </div>

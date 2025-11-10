@@ -2,10 +2,6 @@
 
 import dynamic from "next/dynamic";
 
-const PropertyMap = dynamic(() => import("./property-map-client"), {
-  ssr: false, // <-- important
-});
-
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";

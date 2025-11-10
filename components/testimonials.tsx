@@ -12,8 +12,11 @@ import {
 import BlogCard from "@/features/blogs/components/blog-card";
 import { useLocale } from "next-intl";
 import TestemonialsCard from "@/features/testemonials/components/testemonials-card";
+import { useQuery } from "@tanstack/react-query";
+import { HomeDataQuery } from "@/features/shared/query-options";
 
 export default function FeaturedArticles() {
+  const { data } = useQuery(HomeDataQuery);
   const dir = useLocale() === "ar" ? "rtl" : "ltr";
   const plugin = React.useRef(
     Autoplay({
@@ -23,88 +26,7 @@ export default function FeaturedArticles() {
     })
   );
 
-  const testimonials = [
-    {
-      id: 1,
-      quote: "موقع مميز وموثوق وشراء سريع",
-      description:
-        "وجع العقارات هذا دورا في تجربة ممتازة وسهلة في البحث عن العقار المناسب. يتميز بجودته والحث وسهولة الاستخدام. مع امكانية تصفية النتائج",
-      name: "مينا كمال",
-      role: "عميل",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
-    },
-    {
-      id: 2,
-      quote: "خدمة عملاء ممتازة واحترافية عالية",
-      description:
-        "تعاملت مع الموقع لأول مرة وكانت التجربة رائعة. الفريق متعاون جداً وساعدني في إيجاد العقار المثالي لعائلتي",
-      name: "سارة أحمد",
-      role: "عميلة",
-      image:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
-    },
-    {
-      id: 3,
-      quote: "أفضل منصة عقارية استخدمتها",
-      description:
-        "سهولة في التصفح وخيارات متنوعة. وجدت شقة أحلامي في وقت قياسي. أنصح الجميع بالتعامل معهم",
-      name: "خالد محمود",
-      role: "مستثمر",
-      image:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80",
-    },
-    {
-      id: 4,
-      quote: "ثقة ومصداقية في كل خطوة",
-      description:
-        "من البحث إلى التوقيع، كانت العملية سلسة وشفافة. فريق محترف يفهم احتياجات العملاء",
-      name: "ليلى حسن",
-      role: "عميلة",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80",
-    },
-    {
-      id: 1,
-      quote: "موقع مميز وموثوق وشراء سريع",
-      description:
-        "وجع العقارات هذا دورا في تجربة ممتازة وسهلة في البحث عن العقار المناسب. يتميز بجودته والحث وسهولة الاستخدام. مع امكانية تصفية النتائج",
-      name: "مينا كمال",
-      role: "عميل",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
-    },
-    {
-      id: 2,
-      quote: "خدمة عملاء ممتازة واحترافية عالية",
-      description:
-        "تعاملت مع الموقع لأول مرة وكانت التجربة رائعة. الفريق متعاون جداً وساعدني في إيجاد العقار المثالي لعائلتي",
-      name: "سارة أحمد",
-      role: "عميلة",
-      image:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
-    },
-    {
-      id: 3,
-      quote: "أفضل منصة عقارية استخدمتها",
-      description:
-        "سهولة في التصفح وخيارات متنوعة. وجدت شقة أحلامي في وقت قياسي. أنصح الجميع بالتعامل معهم",
-      name: "خالد محمود",
-      role: "مستثمر",
-      image:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80",
-    },
-    {
-      id: 4,
-      quote: "ثقة ومصداقية في كل خطوة",
-      description:
-        "من البحث إلى التوقيع، كانت العملية سلسة وشفافة. فريق محترف يفهم احتياجات العملاء",
-      name: "ليلى حسن",
-      role: "عميلة",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80",
-    },
-  ];
+  const testimonials = data?.data.testimonials || [];
 
   return (
     <section className="container mx-auto p-4">

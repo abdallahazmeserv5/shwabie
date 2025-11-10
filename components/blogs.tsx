@@ -11,9 +11,22 @@ import {
 } from "@/components/ui/carousel";
 import BlogCard from "@/features/blogs/components/blog-card";
 import { useLocale } from "next-intl";
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { createClient } from "@/lib/ofetch";
+import { Root } from "@/features/shared/types";
+import { Blog } from "@/features/blogs/types";
 
 export default function FeaturedArticles() {
   const dir = useLocale() === "ar" ? "rtl" : "ltr";
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["/blogs", 1],
+    queryFn: () => createClient().get<Root<Blog[]>>(`/blogs?page=${1}`),
+  });
+
+  const blogs = data?.data ?? [];
+
   const plugin = React.useRef(
     Autoplay({
       delay: 1800,
@@ -21,81 +34,6 @@ export default function FeaturedArticles() {
       stopOnMouseEnter: true,
     })
   );
-
-  const articles = [
-    {
-      id: 1,
-      title: "7 طرق لتخصيص شقتك من النمط المعاصر بشكل مميز",
-      author: "ريهام شاكر",
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
-      day: "03",
-      month: "Feb",
-    },
-    {
-      id: 2,
-      title: "10 أفكار لتجديد ديكور المنزل بدون تكلفة كبيرة",
-      author: "نادر سعيد",
-      image:
-        "https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=800&q=80",
-      day: "03",
-      month: "Feb",
-    },
-    {
-      id: 3,
-      title: "ألوان الديكور التي تمنحك راحة نفسية طوال اليوم",
-      author: "سمر أحمد",
-      image:
-        "https://images.unsplash.com/photo-1616486338812-3d3ee6828d85?w=800&q=80",
-      day: "03",
-      month: "Feb",
-    },
-    {
-      id: 4,
-      title: "أفضل النصائح لاختيار إضاءة مثالية للمساحات الصغيرة",
-      author: "محمد سامي",
-      image:
-        "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800&q=80",
-      day: "03",
-      month: "Feb",
-    },
-    {
-      id: 1,
-      title: "7 طرق لتخصيص شقتك من النمط المعاصر بشكل مميز",
-      author: "ريهام شاكر",
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
-      day: "03",
-      month: "Feb",
-    },
-    {
-      id: 2,
-      title: "10 أفكار لتجديد ديكور المنزل بدون تكلفة كبيرة",
-      author: "نادر سعيد",
-      image:
-        "https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=800&q=80",
-      day: "03",
-      month: "Feb",
-    },
-    {
-      id: 3,
-      title: "ألوان الديكور التي تمنحك راحة نفسية طوال اليوم",
-      author: "سمر أحمد",
-      image:
-        "https://images.unsplash.com/photo-1616486338812-3d3ee6828d85?w=800&q=80",
-      day: "03",
-      month: "Feb",
-    },
-    {
-      id: 4,
-      title: "أفضل النصائح لاختيار إضاءة مثالية للمساحات الصغيرة",
-      author: "محمد سامي",
-      image:
-        "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800&q=80",
-      day: "03",
-      month: "Feb",
-    },
-  ];
 
   return (
     <section className="container mx-auto p-4">
@@ -109,12 +47,12 @@ export default function FeaturedArticles() {
             بعض المقالات المميزة التي نحب أن نشاركها معكم
           </p>
         </div>
-        <a
-          href="#"
+        <Link
+          href="/blogs"
           className="text-emerald-600 text-sm font-medium hover:underline"
         >
           عرض كل المقالات ↗
-        </a>
+        </Link>
       </div>
 
       {/* Carousel */}
@@ -128,7 +66,7 @@ export default function FeaturedArticles() {
         className="w-full"
       >
         <CarouselContent className="-ml-4 py-4">
-          {articles.map((article, index) => (
+          {blogs.map((article, index) => (
             <CarouselItem
               key={index}
               className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"

@@ -7,19 +7,20 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { motion, Variants } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname(); // Get current path
 
   const navItems = [
-    { name: "الرئيسية", href: "/", active: true },
-    { name: "من نحن", href: "/about" },
+    { name: "الرئيسية", href: "/" },
+    { name: "من نحن", href: "/aboutus" },
     { name: "العقارات", href: "/properties" },
-    { name: "إتصل بنا", href: "/contact" },
-    { name: "المدونة", href: "/blog" },
+    { name: "إتصل بنا", href: "/contactus" },
+    { name: "المدونة", href: "/blogs" },
   ];
 
-  // Animation variants for staggered menu items
   const listVariants = {
     hidden: {},
     visible: {
@@ -42,6 +43,7 @@ export function Header() {
     },
     hover: { scale: 1.05 },
   };
+
   return (
     <motion.header
       initial={{ y: -100, opacity: 0 }}
@@ -62,41 +64,44 @@ export function Header() {
           variants={listVariants}
           className="hidden md:flex items-center gap-3 bg-green-600/30 rounded-md px-4 py-2 backdrop-blur-sm"
         >
-          {navItems.map((item) => (
-            <motion.div
-              key={item.name}
-              variants={itemVariants}
-              whileHover="hover"
-              className="relative"
-            >
-              <Link
-                href={item.href}
-                className={`px-3 py-1 rounded-md text-sm transition flex items-center gap-1 ${
-                  item.active
-                    ? "bg-white text-green-700 shadow-lg border-b-2 border-green-300"
-                    : "hover:bg-green-500/50"
-                }`}
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <motion.div
+                key={item.name}
+                variants={itemVariants}
+                whileHover="hover"
+                className="relative"
               >
-                {item.name === "الرئيسية" && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"
-                    />
-                  </svg>
-                )}
-                {item.name}
-              </Link>
-            </motion.div>
-          ))}
+                <Link
+                  href={item.href}
+                  className={`px-3 py-1 rounded-md text-sm transition flex items-center gap-1 ${
+                    isActive
+                      ? "bg-white text-green-700 shadow-lg border-b-2 border-green-300"
+                      : "hover:bg-green-500/50"
+                  }`}
+                >
+                  {item.name === "الرئيسية" && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"
+                      />
+                    </svg>
+                  )}
+                  {item.name}
+                </Link>
+              </motion.div>
+            );
+          })}
         </motion.nav>
 
         {/* Desktop Button */}
@@ -104,8 +109,9 @@ export function Header() {
           <Button
             variant="secondary"
             className="bg-white text-green-700 font-medium hover:bg-green-50 transition-all"
+            asChild
           >
-            تواصل معنا
+            <Link href={"/contactus"}>تواصل معنا</Link>
           </Button>
         </div>
 
@@ -127,25 +133,28 @@ export function Header() {
                 animate="visible"
                 variants={listVariants}
               >
-                {navItems.map((item) => (
-                  <motion.div
-                    key={item.name}
-                    variants={itemVariants}
-                    whileHover="hover"
-                  >
-                    <Link
-                      href={item.href}
-                      onClick={() => setOpen(false)}
-                      className={`text-lg transition-all duration-300 ${
-                        item.active
-                          ? "bg-white text-green-700 px-4 py-2 rounded-md shadow-md border-b-2 border-green-300"
-                          : "hover:text-green-200 px-4 py-2 rounded-md hover:bg-green-600/30"
-                      }`}
+                {navItems.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <motion.div
+                      key={item.name}
+                      variants={itemVariants}
+                      whileHover="hover"
                     >
-                      {item.name}
-                    </Link>
-                  </motion.div>
-                ))}
+                      <Link
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        className={`text-lg transition-all duration-300 ${
+                          isActive
+                            ? "bg-white text-green-700 px-4 py-2 rounded-md shadow-md border-b-2 border-green-300"
+                            : "hover:text-green-200 px-4 py-2 rounded-md hover:bg-green-600/30"
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.div>
+                  );
+                })}
                 <motion.div
                   variants={itemVariants}
                   whileHover={{ scale: 1.05 }}
@@ -153,8 +162,9 @@ export function Header() {
                   <Button
                     variant="secondary"
                     className="bg-white text-green-700 font-medium mt-4 w-full"
+                    asChild
                   >
-                    تواصل معنا
+                    <Link href={"/contactus"}>تواصل معنا</Link>
                   </Button>
                 </motion.div>
               </motion.div>
