@@ -11,7 +11,7 @@ import { Root } from "@/features/shared/types";
 import { Blog } from "@/features/blogs/types";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { HomeDataQuery } from "@/features/shared/query-options";
-import { PropertyDataQuery } from "@/features/properties/query-options";
+import { PropertiesDataQuery } from "@/features/properties/query-options";
 
 export default async function Home() {
   const queryClient = createQueryClient();
@@ -22,7 +22,7 @@ export default async function Home() {
       queryFn: () => createClient().get<Root<Blog[]>>("/blogs?page=1"),
     }),
     queryClient.prefetchQuery(HomeDataQuery),
-    queryClient.prefetchQuery(PropertyDataQuery),
+    queryClient.prefetchQuery(PropertiesDataQuery),
   ]);
 
   return (

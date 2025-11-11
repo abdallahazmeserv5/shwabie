@@ -1,23 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import ImageFallback from "@/components/image-fallback";
-import Pagnation from "@/features/properties/components/pagnation";
-import BlogCard from "./blog-card";
-import { useQuery } from "@tanstack/react-query";
-import { createClient } from "@/lib/ofetch";
-import { Blog } from "../types";
-import { Root } from "@/features/shared/types";
 import Breadcrumb from "@/components/breadcrumb";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import Pagnation from "@/features/properties/components/pagnation";
 import Triangle from "@/features/shared/components/triangle";
+import { Root } from "@/features/shared/types";
+import { createClient } from "@/lib/ofetch";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Blog } from "../types";
+import BlogCard from "./blog-card";
 
 export default function BlogsList() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["/blogs", currentPage],
+    queryKey: [`/blogs?page=${currentPage}`],
     queryFn: () =>
       createClient().get<Root<Blog[]>>(`/blogs?page=${currentPage}`),
   });
@@ -27,7 +24,6 @@ export default function BlogsList() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll to top when page changes
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -48,7 +44,7 @@ export default function BlogsList() {
       </Triangle>
 
       <div className="flex flex-col gap-2">
-        <div className="bg-[#e8fdf5] grid sm:col-span-2 2xl:grid-cols-3 gap-3 p-4 -mt-12 relative z-10">
+        <div className="bg-[#e8fdf5] grid sm:grid-cols-2  2xl:grid-cols-3 gap-3 p-4 -mt-12 relative z-10">
           {isLoading ? (
             <div className="col-span-full text-center py-8">
               جاري التحميل...

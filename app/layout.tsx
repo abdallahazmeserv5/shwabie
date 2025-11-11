@@ -11,6 +11,7 @@ import { Alexandria } from "next/font/google";
 import type React from "react";
 import "./globals.css";
 import Providers from "./providers";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const _alexandra = Alexandria({
   subsets: ["latin", "arabic"],
@@ -41,6 +42,7 @@ export default async function RootLayout({
               <Header />
               {children}
               <Footer />
+              <ReactQueryDevtools initialIsOpen={false} />
             </HydrationBoundary>
           </Providers>
         </NextIntlClientProvider>

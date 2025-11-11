@@ -6,8 +6,9 @@ import { motion } from "framer-motion";
 import FeaturesSection from "./features";
 import Breadcrumb from "@/components/breadcrumb";
 import Triangle from "@/features/shared/components/triangle";
+import { AboutUs } from "@/app/(pages)/aboutus/page";
 
-export default function AboutusSection() {
+export default function AboutusSection({ data }: { data: AboutUs }) {
   return (
     <section className="pt-8 container px-4 mx-auto  ">
       {/* Triangle Background */}
@@ -24,7 +25,7 @@ export default function AboutusSection() {
             ]}
           />
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary drop-shadow-2xl">
-            مكتب دار الشويبي للعقارات
+            {data.title}
           </h2>
         </div>
       </Triangle>
@@ -35,7 +36,7 @@ export default function AboutusSection() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         viewport={{ once: true }}
       >
-        <div className="grid md:grid-cols-2">
+        <div className="flex gap-5">
           {/* Right side - Map */}
           <motion.div
             className="hidden relative md:block h-[550px] object-cover  flex-1 w-full  "
@@ -44,11 +45,7 @@ export default function AboutusSection() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true }}
           >
-            <ImageFallback
-              src={"/aboutus-image.webp"}
-              alt="Father and son having fun in home"
-              fill
-            />
+            <ImageFallback src={data.image} alt={data.description} fill />
           </motion.div>
 
           <motion.div

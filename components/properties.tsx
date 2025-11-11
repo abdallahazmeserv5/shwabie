@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import ImageFallback from "./image-fallback";
 import PropertyFilter from "./property-filter";
 
 import {
@@ -9,18 +8,16 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import Pagnation from "@/features/properties/components/pagnation";
 import { PropertyCard } from "@/features/properties/components/property-card";
+import PropertyFilterForm from "@/features/properties/components/property-filter-form";
+import { PropertiesDataQuery } from "@/features/properties/query-options";
+import Triangle from "@/features/shared/components/triangle";
+import { useQuery } from "@tanstack/react-query";
 import Autoplay from "embla-carousel-autoplay";
 import { useLocale } from "next-intl";
 import * as React from "react";
-import Link from "next/link";
-import PropertiesPagnation from "@/features/properties/components/pagnation";
-import Pagnation from "@/features/properties/components/pagnation";
-import Triangle from "@/features/shared/components/triangle";
 import Breadcrumb from "./breadcrumb";
-import PropertyFilterForm from "@/features/properties/components/property-filter-form";
-import { useQuery } from "@tanstack/react-query";
-import { PropertyDataQuery } from "@/features/properties/query-options";
 
 type Property = {
   id: number;
@@ -115,7 +112,7 @@ export default function Properties({
   const [favorites, setFavorites] = useState<number[]>([]);
   const dir = useLocale() === "ar" ? "rtl" : "ltr";
 
-  const { data } = useQuery(PropertyDataQuery);
+  const { data } = useQuery(PropertiesDataQuery);
 
   const properties = data?.data || [];
   const toggleFavorite = (id: number) => {
@@ -136,6 +133,7 @@ export default function Properties({
       stopOnMouseEnter: false,
     })
   );
+
   const secondPluginForward = React.useRef(
     Autoplay({
       delay: 2500,

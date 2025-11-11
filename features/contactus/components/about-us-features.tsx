@@ -14,8 +14,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useLocale } from "next-intl";
+import { AboutusFeature } from "@/app/(pages)/aboutus/page";
 
-export default function AboutUsFeatures() {
+export default function AboutUsFeatures({
+  features = [],
+}: {
+  features: AboutusFeature[];
+}) {
   const dir = useLocale() === "ar" ? "rtl" : "ltr";
   const plugin = React.useRef(
     Autoplay({
@@ -46,7 +51,6 @@ export default function AboutUsFeatures() {
     },
   ];
 
-  // Framer Motion variants (with custom index)
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: (custom: number) => ({
@@ -68,7 +72,7 @@ export default function AboutUsFeatures() {
 
         {/* Desktop: Grid Layout */}
         <div className="hidden md:flex gap-6 flex-wrap justify-center">
-          {services.map((service, i) => (
+          {features.map((feature, i) => (
             <motion.div
               key={i}
               custom={i}
@@ -84,7 +88,7 @@ export default function AboutUsFeatures() {
             >
               <Card
                 className={`border-none transition-all duration-300 ${
-                  service.primary
+                  i
                     ? "bg-white shadow-xl hover:shadow-2xl"
                     : "bg-gray-50 shadow-sm hover:shadow-lg"
                 }`}
@@ -92,20 +96,22 @@ export default function AboutUsFeatures() {
                 <CardHeader>
                   <div className="flex justify-center mb-4">
                     <ImageFallback
-                      src={service.icon}
-                      alt={service.title}
+                      src={feature.image}
+                      alt={feature.description}
                       width={80}
                       height={80}
                     />
                   </div>
                   <CardTitle className="text-xl font-semibold">
-                    {service.title}
+                    {feature.description}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-500 mb-6 text-sm">{service.desc}</p>
+                  {/* <p className="text-gray-500 mb-6 text-sm">
+                    {feature.description}
+                  </p> */}
                   <Button
-                    variant={service.primary ? "default" : "outline"}
+                    variant={i ? "default" : "outline"}
                     className="rounded-full"
                   >
                     عرض المزيد
@@ -128,7 +134,7 @@ export default function AboutUsFeatures() {
             className="w-full"
           >
             <CarouselContent className="-ml-4 py-4">
-              {services.map((service, i) => (
+              {features.map((feature, i) => (
                 <CarouselItem key={i} className="pl-4 basis-full">
                   <motion.div
                     custom={i}
@@ -139,32 +145,27 @@ export default function AboutUsFeatures() {
                   >
                     <Card
                       className={`border-none transition-all duration-300 ${
-                        service.primary
-                          ? "bg-white shadow-xl"
-                          : "bg-gray-50 shadow-sm"
+                        i ? "bg-white shadow-xl" : "bg-gray-50 shadow-sm"
                       }`}
                     >
                       <CardHeader>
                         <div className="flex justify-center mb-4">
                           <ImageFallback
-                            src={service.icon}
-                            alt={service.title}
+                            src={feature.image}
+                            alt={feature.description}
                             width={80}
                             height={80}
                           />
                         </div>
                         <CardTitle className="text-xl font-semibold">
-                          {service.title}
+                          {feature.description}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-gray-500 mb-6 text-sm">
-                          {service.desc}
-                        </p>
-                        <Button
-                          variant={service.primary ? "default" : "outline"}
-                          className="rounded-full"
-                        >
+                        {/* <p className="text-gray-500 mb-6 text-sm">
+                          {feature.description}
+                        </p> */}
+                        <Button variant={"default"} className="rounded-full">
                           عرض المزيد
                         </Button>
                       </CardContent>

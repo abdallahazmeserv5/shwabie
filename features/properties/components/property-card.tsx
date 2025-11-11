@@ -5,6 +5,7 @@ import { Heart, MapPin } from "lucide-react";
 import ImageFallback from "@/components/image-fallback";
 import { Separator } from "@/components/ui/separator";
 import { Property } from "../types";
+import Link from "next/link";
 
 export function PropertyCard({
   property,
@@ -56,10 +57,12 @@ export function PropertyCard({
       </div>
 
       {/* Content */}
-      <div className="p-3 space-y-2 flex flex-col justify-between flex-grow min-h-[210px]">
+      <div className="p-3 space-y-2 flex flex-col justify-between grow min-h-[210px]">
         <div className="space-y-2">
           <h3 className="text-[#000929] font-bold text-base line-clamp-1">
-            {property.name || "اسم العقار غير متوفر"}
+            <Link href={`/properties/${property.slug}`}>
+              {property.name || "اسم العقار غير متوفر"}
+            </Link>
           </h3>
 
           <p className="text-lg font-bold text-gray-900">
@@ -105,7 +108,7 @@ export function PropertyCard({
               ))}
             </div>
           ) : (
-            <div className="h-[28px] flex items-center text-xs text-gray-400 italic">
+            <div className="h-7 flex items-center text-xs text-gray-400 italic">
               لا توجد مميزات متاحة
             </div>
           )}

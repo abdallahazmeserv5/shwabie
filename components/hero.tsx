@@ -17,28 +17,34 @@ export default function Hero() {
 
       {/* ✨ Floating Dots */}
       <div className="absolute inset-0 overflow-hidden">
-        {dots.map((_, i) => (
-          <motion.span
-            key={i}
-            className="absolute w-3 h-3 rounded-full bg-emerald-300/40 blur-[1px]"
-            initial={{
-              x: Math.random() * (window?.innerWidth || 500),
-              y: Math.random() * (window?.innerWidth || 500),
-              scale: Math.random() * 0.8 + 0.4,
-            }}
-            animate={{
-              y: [null, Math.random() * (window?.innerWidth || 500)],
-              x: [null, Math.random() * (window?.innerWidth || 500)],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 12 + Math.random() * 8,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
-            }}
-          />
-        ))}
+        {dots.map((_, i) => {
+          const randX = Math.random() * 800;
+          const randY = Math.random() * 600;
+          const randScale = Math.random() * 0.8 + 0.4;
+
+          return (
+            <motion.span
+              key={i}
+              className="absolute w-3 h-3 rounded-full bg-emerald-300/40 blur-[1px]"
+              initial={{
+                x: randX,
+                y: randY,
+                scale: randScale,
+              }}
+              animate={{
+                x: [randX, Math.random() * 800],
+                y: [randY, Math.random() * 600],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 12 + Math.random() * 8,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+              }}
+            />
+          );
+        })}
       </div>
 
       <div className="absolute inset-0 bg-black/20" />

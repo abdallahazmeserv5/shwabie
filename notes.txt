@@ -1,20 +1,9 @@
-1- No Testemonial end point
+Required changes
 
-2- No settings end point for phone number and address and social media links 
+    1- /about-us -> features need a title and link for the button and 
 
-3- For single property need lat and lang, key value pair for proptery fatures, number of rooms, area and so on, is the price coming from backend is always a month price?
+    2- need an endpoint showing similar properties 
 
-4- need a way to know is this property for selling, buying or renting, way for search for the property
+    3- In single details for property i need long and lat 
 
-5- Need end point for search!
-
-6- Need clerfecation on how to rent a property, what is the esentails detials? property id and name and phone number only? 
-this data need to not be requeird 
-{
-    "message": "الحقل عدد الزائرين مطلوب.",
-    "errors": {
-        "guest_count": [
-            "الحقل عدد الزائرين مطلوب."
-        ]
-    }
-}
+    4- I need info for how to booking a property/ (what is the bussiness requirment)

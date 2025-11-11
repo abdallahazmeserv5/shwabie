@@ -51,15 +51,15 @@ export default function FeaturesSection() {
                 transition={{ duration: 0.5, delay: index * 0.15 }}
                 viewport={{ once: true }}
               >
-                <Card className="border-none bg-white/80 backdrop-blur-md shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl  min-h-[300px] flex">
+                <Card className="border-none p-3 bg-white/80 backdrop-blur-md shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl  min-h-[300px] flex">
                   <CardContent className="flex flex-col items-center justify-center space-y-3 py-10 h-full">
                     <div className="p-3 rounded-full bg-green-100">
                       <Icon className="size-8 text-green-600" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-gray-900 line-clamp-1 min-h-[30px]">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">
+                    <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto line-clamp-3 min-h-[70px]">
                       {feature.description}
                     </p>
                   </CardContent>
@@ -96,10 +96,10 @@ export default function FeaturesSection() {
                           <div className="p-3 rounded-full bg-green-100 w-fit">
                             <Icon className="w-8 h-8 text-green-600" />
                           </div>
-                          <h3 className="text-lg font-semibold text-gray-900">
+                          <h3 className="text-lg font-semibold text-gray-900 line-clamp-1 min-h-[30px]">
                             {feature.title}
                           </h3>
-                          <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">
+                          <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto line-clamp-3 min-h-[70px]">
                             {feature.description}
                           </p>
                         </CardContent>
