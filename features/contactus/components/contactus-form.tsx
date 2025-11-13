@@ -11,14 +11,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import LocationMap from "@/features/properties/components/property-location";
 import Triangle from "@/features/shared/components/triangle";
 import { zodResolver } from "@hookform/resolvers/zod";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+
+const LocationMap = dynamic(
+  () => import("@/features/properties/components/property-location"),
+  { ssr: false }
+);
 
 // ✅ Define schema with zod
 const formSchema = z.object({

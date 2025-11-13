@@ -12,6 +12,7 @@ import { Blog } from "@/features/blogs/types";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { HomeDataQuery } from "@/features/shared/query-options";
 import { PropertiesDataQuery } from "@/features/properties/query-options";
+import { Suspense } from "react";
 
 export default async function Home() {
   const queryClient = createQueryClient();
@@ -30,7 +31,9 @@ export default async function Home() {
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Hero />
         <Features />
-        <Properties />
+        <Suspense fallback={<>...</>}>
+          <Properties />
+        </Suspense>
         <HowItWorks />
         <Blogs />
         <Testimonials />
