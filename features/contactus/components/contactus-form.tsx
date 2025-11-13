@@ -1,6 +1,6 @@
 "use client";
 
-import ImageFallback from "@/components/image-fallback";
+import Breadcrumb from "@/components/breadcrumb";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,14 +12,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import LocationMap from "@/features/properties/components/property-location";
-import { cn } from "@/lib/utils";
+import Triangle from "@/features/shared/components/triangle";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { motion } from "framer-motion";
-import Triangle from "@/features/shared/components/triangle";
-import Breadcrumb from "@/components/breadcrumb";
 
 // ✅ Define schema with zod
 const formSchema = z.object({
@@ -37,6 +36,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function ContactusForm() {
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,8 +59,7 @@ export default function ContactusForm() {
     const whatsappUrl = `https://wa.me/+966123456?text=${encodeURIComponent(
       message
     )}`;
-    window.open(whatsappUrl, "_blank");
-
+    router.push(whatsappUrl);
     form.reset();
   };
 
