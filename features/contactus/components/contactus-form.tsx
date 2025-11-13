@@ -49,8 +49,6 @@ export default function ContactusForm() {
   });
 
   const onSubmit = (values: FormValues) => {
-    console.log(values);
-
     const message = `شراء عقار سهل وعملي
 الاسم: ${values.fullName}
 الهاتف: ${values.phone}

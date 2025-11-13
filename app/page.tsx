@@ -22,7 +22,7 @@ export default async function Home() {
       queryFn: () => createClient().get<Root<Blog[]>>("/blogs?page=1"),
     }),
     queryClient.prefetchQuery(HomeDataQuery),
-    queryClient.prefetchQuery(PropertiesDataQuery),
+    queryClient.prefetchQuery(PropertiesDataQuery()),
   ]);
 
   return (

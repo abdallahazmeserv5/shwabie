@@ -18,10 +18,9 @@ export default async function Page({
 
   await Promise.all([
     queryClient.prefetchQuery(PropertyDataQuery(propertySlug)),
-    queryClient.prefetchQuery(PropertiesDataQuery),
+    queryClient.prefetchQuery(PropertiesDataQuery()),
   ]);
 
-  console.log({ propertySlug });
   return (
     <main className="mt-2 lg:mt-24 flex flex-col gap-10">
       <HydrationBoundary state={dehydrate(queryClient)}>

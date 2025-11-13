@@ -1,7 +1,7 @@
-import ImageFallback from "@/components/image-fallback";
-import { BlogDetails } from "@/features/blogs/types";
-import { Root } from "@/features/shared/types";
 import { createClient } from "@/lib/ofetch";
+import { Root } from "@/features/shared/types";
+import { BlogDetails as BlogDetailsType } from "@/features/blogs/types";
+import BlogDetails from "@/features/blogs/components/blog-details";
 
 export default async function Page({
   params,
@@ -10,21 +10,11 @@ export default async function Page({
 }) {
   const { blogSlug } = await params;
 
-  const blogRes = await createClient().get<Root<BlogDetails>>(
+  const blogRes = await createClient().get<Root<BlogDetailsType>>(
     `/blog/${blogSlug}`
   );
-  const blogDetails = blogRes.data;
-  console.log({ blogDetails });
 
-  return (
-    <section className="container mx-auto px-4 my-5">
-      <div className="rounded-md relative overflow-hidden h-60 sm:h-100">
-        <ImageFallback
-          src={blogDetails.author_image}
-          alt={blogDetails.title}
-          fill
-        />
-      </div>
-    </section>
-  );
+  const blogDetails = blogRes.data;
+
+  return <BlogDetails blogDetails={blogDetails} />;
 }

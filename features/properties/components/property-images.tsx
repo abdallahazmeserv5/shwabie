@@ -183,9 +183,6 @@ export default function PropertyImages({ property }: { property: Property }) {
           </motion.div>
         </DialogContent>
       </Dialog>
-
-      <PropertyDescription property={property} />
-      <CtaProperty property={property} />
     </motion.div>
   );
 }

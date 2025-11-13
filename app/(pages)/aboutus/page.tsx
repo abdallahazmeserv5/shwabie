@@ -35,8 +35,6 @@ export default async function Page() {
 
   const aboutusData = aboutusResponse.data;
 
-  console.log({ aboutusResponse });
-
   return (
     <main className="mt-2 lg:mt-24 flex flex-col gap-10">
       <AboutusSection data={aboutusData} />

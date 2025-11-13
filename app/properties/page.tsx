@@ -1,6 +1,5 @@
 import CTA from "@/components/cta";
 import Properties from "@/components/properties";
-import React from "react";
 
 export default function Page() {
   return (

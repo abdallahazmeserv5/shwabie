@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import PropertyFilter from "./property-filter";
-
 import {
   Carousel,
   CarouselContent,
@@ -11,98 +10,17 @@ import {
 import Pagnation from "@/features/properties/components/pagnation";
 import { PropertyCard } from "@/features/properties/components/property-card";
 import PropertyFilterForm from "@/features/properties/components/property-filter-form";
-import { PropertiesDataQuery } from "@/features/properties/query-options";
+import {
+  PropertiesDataQuery,
+  FiltersDataQuery,
+} from "@/features/properties/query-options";
 import Triangle from "@/features/shared/components/triangle";
 import { useQuery } from "@tanstack/react-query";
 import Autoplay from "embla-carousel-autoplay";
 import { useLocale } from "next-intl";
+import { useSearchParams, useRouter } from "next/navigation";
 import * as React from "react";
 import Breadcrumb from "./breadcrumb";
-
-type Property = {
-  id: number;
-  image: string;
-  price: string;
-  beds: number;
-  baths: number;
-  area: string;
-  location: string;
-};
-
-export const properties: Property[] = [
-  {
-    id: 1,
-    image: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4",
-    price: "950,000",
-    beds: 3,
-    baths: 2,
-    area: "250 م²",
-    location: "حي النخيل",
-  },
-  {
-    id: 2,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-    price: "850,000",
-    beds: 4,
-    baths: 3,
-    area: "300 م²",
-    location: "حي الياسمين",
-  },
-  {
-    id: 3,
-    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
-    price: "750,000",
-    beds: 3,
-    baths: 2,
-    area: "220 م²",
-    location: "حي الورود",
-  },
-  {
-    id: 4,
-    image: "https://images.unsplash.com/photo-1599427303058-f04cbcf4756f",
-    price: "1,200,000",
-    beds: 5,
-    baths: 4,
-    area: "400 م²",
-    location: "حي الزهور",
-  },
-  {
-    id: 5,
-    image: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4",
-    price: "950,000",
-    beds: 3,
-    baths: 2,
-    area: "250 م²",
-    location: "حي النخيل",
-  },
-  {
-    id: 6,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-    price: "850,000",
-    beds: 4,
-    baths: 3,
-    area: "300 م²",
-    location: "حي الياسمين",
-  },
-  {
-    id: 7,
-    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
-    price: "750,000",
-    beds: 3,
-    baths: 2,
-    area: "220 م²",
-    location: "حي الورود",
-  },
-  {
-    id: 8,
-    image: "https://images.unsplash.com/photo-1599427303058-f04cbcf4756f",
-    price: "1,200,000",
-    beds: 5,
-    baths: 4,
-    area: "400 م²",
-    location: "حي الزهور",
-  },
-];
 
 export default function Properties({
   secondary = false,
@@ -111,17 +29,38 @@ export default function Properties({
 }) {
   const [favorites, setFavorites] = useState<number[]>([]);
   const dir = useLocale() === "ar" ? "rtl" : "ltr";
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const { data } = useQuery(PropertiesDataQuery);
+  // Fetch properties with current URL params
+  const { data, isLoading, error } = useQuery(
+    PropertiesDataQuery(searchParams)
+  );
+
+  // Fetch filters metadata
+  const { data: filtersData } = useQuery(FiltersDataQuery);
 
   const properties = data?.data || [];
+  const filters = filtersData?.data;
+
   const toggleFavorite = (id: number) => {
     setFavorites((prev) =>
       prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
     );
   };
 
-  const half = Math.round((data?.data.length || 0) / 2);
+  // Pagination
+  const currentPage = data?.meta?.current_page || 1;
+  const lastPage = data?.meta?.last_page || 1;
+
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`, { scroll: true });
+  };
+
+  // For carousel view (non-secondary)
+  const half = Math.round((properties.length || 0) / 2);
   const firstRow = properties.slice(0, half);
   const secondRow = properties.slice(half);
 
@@ -146,12 +85,14 @@ export default function Properties({
     <section className="pt-10 2xl:pt-28 container px-4 mx-auto">
       <Triangle>
         <div className="relative z-20 text-center flex flex-col items-center gap-5 pb-20">
-          <Breadcrumb
-            items={[
-              { title: "الرئيسية", href: "/" },
-              { title: "العقارات", href: "/properties" },
-            ]}
-          />
+          {secondary && (
+            <Breadcrumb
+              items={[
+                { title: "الرئيسية", href: "/" },
+                { title: "العقارات", href: "/properties" },
+              ]}
+            />
+          )}
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             <span className="text-primary mx-2 inline-block">عقارات</span>
             منتقاة بعناية
@@ -166,63 +107,112 @@ export default function Properties({
 
       <div className="bg-[#e8fdf5] p-4 -mt-12 relative z-10">
         <PropertyFilter />
-        {secondary && <PropertyFilterForm />}
-        {/* ===== Row 1 Carousel ===== */}
-        <Carousel
-          opts={{
-            align: "center",
-            loop: true,
-            direction: dir,
-          }}
-          plugins={[firstPluginForward.current]}
-          className="mt-6"
-        >
-          <CarouselContent className="-ml-4 py-2">
-            {firstRow.map((property) => (
-              <CarouselItem
-                key={property.id}
-                className="pl-4 basis-3/4 sm:basis-1/2 md:basis-1/3 xl:basis-1/4"
-              >
-                <PropertyCard
-                  property={property}
-                  isFavorite={favorites.includes(property.id)}
-                  toggleFavorite={toggleFavorite}
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-        {/* ===== Row 2 Carousel (opposite direction) ===== */}
-        <Carousel
-          dir="ltr"
-          opts={{
-            align: "center",
-            loop: true,
-            direction: "ltr",
-          }}
-          plugins={[secondPluginForward.current]}
-          className="mt-8"
-        >
-          <CarouselContent className="-ml-4 py-2 text-end">
-            {secondRow.map((property) => (
-              <CarouselItem
-                key={property.id}
-                className="pl-4 basis-3/4 sm:basis-1/2 md:basis-1/3 xl:basis-1/4"
-              >
-                <PropertyCard
-                  property={property}
-                  isFavorite={favorites.includes(property.id)}
-                  toggleFavorite={toggleFavorite}
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-        {secondary && (
+
+        {secondary && <PropertyFilterForm filters={filters} />}
+
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <p className="mt-4 text-gray-600">جاري تحميل العقارات...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-12">
+            <p className="text-red-600">حدث خطأ في تحميل العقارات</p>
+          </div>
+        )}
+
+        {/* No Results */}
+        {!isLoading && !error && properties.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-600">لا توجد عقارات متاحة</p>
+          </div>
+        )}
+
+        {/* Properties Display */}
+        {!isLoading && !error && properties.length > 0 && (
+          <>
+            {secondary ? (
+              // Grid View for secondary (properties page)
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
+                {properties.map((property) => (
+                  <PropertyCard
+                    key={property.id}
+                    property={property}
+                    isFavorite={favorites.includes(property.id)}
+                    toggleFavorite={toggleFavorite}
+                  />
+                ))}
+              </div>
+            ) : (
+              // Carousel View for homepage
+              <>
+                {/* Row 1 Carousel */}
+                <Carousel
+                  opts={{
+                    align: "center",
+                    loop: true,
+                    direction: dir,
+                  }}
+                  plugins={[firstPluginForward.current]}
+                  className="mt-6"
+                >
+                  <CarouselContent className="-ml-4 py-2">
+                    {firstRow.map((property) => (
+                      <CarouselItem
+                        key={property.id}
+                        className="pl-4 basis-3/4 sm:basis-1/2 md:basis-1/3 xl:basis-1/4"
+                      >
+                        <PropertyCard
+                          property={property}
+                          isFavorite={favorites.includes(property.id)}
+                          toggleFavorite={toggleFavorite}
+                        />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </Carousel>
+
+                {/* Row 2 Carousel (opposite direction) */}
+                <Carousel
+                  dir="ltr"
+                  opts={{
+                    align: "center",
+                    loop: true,
+                    direction: "ltr",
+                  }}
+                  plugins={[secondPluginForward.current]}
+                  className="mt-8"
+                >
+                  <CarouselContent className="-ml-4 py-2 text-end">
+                    {secondRow.map((property) => (
+                      <CarouselItem
+                        key={property.id}
+                        className="pl-4 basis-3/4 sm:basis-1/2 md:basis-1/3 xl:basis-1/4"
+                      >
+                        <PropertyCard
+                          property={property}
+                          isFavorite={favorites.includes(property.id)}
+                          toggleFavorite={toggleFavorite}
+                        />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </Carousel>
+              </>
+            )}
+          </>
+        )}
+
+        {/* Pagination - Only show in secondary (grid) view */}
+        {secondary && !isLoading && properties.length > 0 && (
           <Pagnation
-            currentPage={1}
-            lastPage={1}
-            onPageChange={() => console.log(" i got clicked")}
+            currentPage={currentPage}
+            lastPage={lastPage}
+            onPageChange={handlePageChange}
           />
         )}
       </div>

@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { CheckCircle2, MapPin, Tag } from "lucide-react";
 import LocationMap from "./property-location";
 import { Property } from "../types";
+import PropertyDescription from "./property-description";
+import CtaProperty from "./cta-property";
 
 export default function PropertyDetails({ property }: { property: Property }) {
   const details = [
@@ -102,7 +104,7 @@ export default function PropertyDetails({ property }: { property: Property }) {
       )}
 
       {/* الموقع */}
-      <motion.div variants={cardVariants} transition={{ delay: 0.3 }}>
+      {/* <motion.div variants={cardVariants} transition={{ delay: 0.3 }}>
         <Card className="pt-6 pb-2">
           <CardHeader className="border-b">
             <CardTitle className="text-xl font-bold flex items-center gap-2">
@@ -113,7 +115,10 @@ export default function PropertyDetails({ property }: { property: Property }) {
             <LocationMap country={property.country} city={property.city} />
           </CardContent>
         </Card>
-      </motion.div>
+      </motion.div> */}
+
+      <PropertyDescription property={property} />
+      <CtaProperty property={property} />
     </motion.div>
   );
 }

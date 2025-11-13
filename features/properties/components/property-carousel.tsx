@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 
-import { properties } from "@/components/properties";
 import {
   Carousel,
   CarouselContent,
@@ -11,13 +10,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { PropertyCard } from "@/features/properties/components/property-card";
+import { useQuery } from "@tanstack/react-query";
 import Autoplay from "embla-carousel-autoplay";
 import { useLocale } from "next-intl";
-import { useQuery } from "@tanstack/react-query";
 import { PropertiesDataQuery } from "../query-options";
 
 export default function PropertyCarousel() {
-  const { data } = useQuery(PropertiesDataQuery);
+  const { data } = useQuery(PropertiesDataQuery());
 
   const property = data?.data || [];
   const [favorites, setFavorites] = useState<number[]>([]);
