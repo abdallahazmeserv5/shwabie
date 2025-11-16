@@ -6,6 +6,8 @@ import ImageFallback from "@/components/image-fallback";
 import { Separator } from "@/components/ui/separator";
 import { Property } from "../types";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useDirection } from "@/hooks/use-direction";
 
 export function PropertyCard({
   property,
@@ -16,13 +18,18 @@ export function PropertyCard({
   isFavorite: boolean;
   toggleFavorite: (id: number) => void;
 }) {
+  const t = useTranslations(); // flat translation keys
+  const { isRtl } = useDirection();
   return (
-    <Card className="hover:shadow-xl transition duration-300 border-0 rounded-2xl bg-white flex flex-col h-full">
+    <Card
+      dir={isRtl ? "rtl" : "ltr"}
+      className="hover:shadow-xl pt-0 transition duration-300 border-0 rounded-2xl bg-white flex flex-col h-full"
+    >
       {/* Image */}
       <div className="relative h-48 w-full rounded-t-2xl overflow-hidden">
         <ImageFallback
           src={property.thumbnail}
-          alt={property.name}
+          alt={property.name || t("propertyNameUnavailable")}
           fill
           className="object-cover"
         />
@@ -46,12 +53,12 @@ export function PropertyCard({
         <div className="w-[104px] h-10 rounded-2xl absolute -bottom-1 -left-2">
           <ImageFallback
             src="/home/bg-badge.png"
-            alt="Background"
+            alt={t("badgeAlt")}
             className="w-full h-full object-contain"
             fill
           />
           <span className="text-white absolute top-1 -translate-x-1/3 left-1/2 text-sm font-bold z-10">
-            مميزة
+            {t("featured")}
           </span>
         </div>
       </div>
@@ -61,12 +68,14 @@ export function PropertyCard({
         <div className="space-y-2">
           <h3 className="text-[#000929] font-bold text-base line-clamp-1">
             <Link href={`/properties/${property.slug}`}>
-              {property.name || "اسم العقار غير متوفر"}
+              {property.name || t("propertyNameUnavailable")}
             </Link>
           </h3>
 
           <p className="text-lg font-bold text-gray-900">
-            <span className="text-[#808494] font-normal mx-1">السعر /</span>
+            <span className="text-[#808494] font-normal mx-1">
+              {t("priceLabel")} /
+            </span>
             <span className="text-primary mx-1">
               {property.price ? property.price : "—"}
             </span>
@@ -80,7 +89,7 @@ export function PropertyCard({
             <span className="text-sm">
               {property.city && property.country
                 ? `${property.city}, ${property.country}`
-                : "الموقع غير محدد"}
+                : t("locationUnavailable")}
             </span>
           </div>
         </div>
@@ -109,7 +118,7 @@ export function PropertyCard({
             </div>
           ) : (
             <div className="h-7 flex items-center text-xs text-gray-400 italic">
-              لا توجد مميزات متاحة
+              {t("noFeatures")}
             </div>
           )}
         </div>

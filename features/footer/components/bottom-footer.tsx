@@ -1,11 +1,17 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { ChevronUp } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function BottomFooter() {
+  const t = useTranslations();
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -15,12 +21,12 @@ export default function BottomFooter() {
       className="mt-12 pt-8 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between gap-4"
     >
       <p className="text-sm text-gray-500 text-center md:text-right">
-        دار الشويبي © {new Date().getFullYear()} تصميم
+        {t("company_name")} © {new Date().getFullYear()} {t("designed_by")}
         <Link
           href="https://serv5.com/"
           className="text-primary hover:text-primary/90 mx-1"
         >
-          وبرمجة سيرف 5
+          {t("serv5")}
         </Link>
       </p>
 

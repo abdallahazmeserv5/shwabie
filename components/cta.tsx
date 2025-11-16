@@ -7,11 +7,14 @@ import ImageFallback from "./image-fallback";
 import Link from "next/link";
 import { SiteSettingsQuery } from "@/features/shared/query-options";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 export default function CTA() {
+  const t = useTranslations();
   const { data } = useQuery(SiteSettingsQuery);
 
   const phoneNumber = data?.data.site_phone;
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 50 }}
@@ -23,7 +26,7 @@ export default function CTA() {
       <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
         {/* Image Section */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }} // 👈 from below
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
@@ -31,7 +34,7 @@ export default function CTA() {
         >
           <ImageFallback
             src="/building-image.webp"
-            alt="Illustration"
+            alt={t("cta_image_alt")}
             width={400}
             height={200}
             className="object-contain w-[250px] sm:w-[300px] md:w-[400px] h-auto"
@@ -40,17 +43,15 @@ export default function CTA() {
 
         {/* Text Section */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }} // 👈 also from below
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true }}
-          className="text-center lg:text-right text-white space-y-4 flex-1"
+          className="text-center lg:text-start text-white space-y-4 flex-1"
         >
-          <h2 className="text-2xl md:text-3xl font-bold">
-            لم تجد عقارك المناسب بعد؟
-          </h2>
+          <h2 className="text-2xl md:text-3xl font-bold">{t("cta_title")}</h2>
           <p className="text-sm md:text-base opacity-90 leading-relaxed">
-            يمكنك التصفح والاستفسار عن كل جديد من طرق التواصل
+            {t("cta_description")}
           </p>
           <div className="flex justify-center lg:justify-start">
             <Button
@@ -63,7 +64,7 @@ export default function CTA() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                اتصل بنا ↗
+                {t("cta_button")}
               </Link>
             </Button>
           </div>

@@ -7,6 +7,7 @@ export interface ClientConfig extends Omit<FetchOptions, "method" | "body"> {
   baseURL?: string;
   tokenCookieName?: string;
   useFormData?: boolean;
+  autoLocale?: boolean;
   headers?: HeadersInit;
 }
 
@@ -48,6 +49,27 @@ export interface HttpClient {
   raw: typeof ofetch;
 }
 
+function getLocaleFromCookies(): string {
+  if (typeof window !== "undefined") {
+    // Client-side: read from document.cookie
+    const cookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("NEXT_LOCALE="));
+    return cookie ? cookie.split("=")[1] : "ar";
+  } else {
+    try {
+      if (
+        typeof globalThis !== "undefined" &&
+        (globalThis as any).__NEXT_LOCALE__
+      ) {
+        return (globalThis as any).__NEXT_LOCALE__;
+      }
+    } catch {}
+
+    return "ar";
+  }
+}
+
 /**
  * Convert JSON object to FormData
  */
@@ -82,13 +104,28 @@ export const jsonToFormData = (
 };
 
 /**
- * Create ofetch client with authentication and FormData support
+ * Create ofetch client with authentication, FormData, and automatic locale support
+ *
+ * For Server Components: Pass locale explicitly via headers
+ * For Client Components: Locale is auto-detected from cookies
+ *
+ * @example Server Component
+ * ```ts
+ * const locale = await getLocale();
+ * const client = createClient({ headers: { "Accept-Language": locale } });
+ * ```
+ *
+ * @example Client Component
+ * ```ts
+ * const client = createClient(); // Auto-detects locale from cookies
+ * ```
  */
 export const createClient = (config: ClientConfig = {}): HttpClient => {
   const {
     baseURL = process.env.NEXT_PUBLIC_BACKEND_URL,
     tokenCookieName = "acess-token",
     useFormData = true,
+    autoLocale = true, // Enable auto locale by default
     headers = {},
     ...restConfig
   } = config;
@@ -98,8 +135,6 @@ export const createClient = (config: ClientConfig = {}): HttpClient => {
     baseURL,
     ...restConfig,
     onRequest({ options }: FetchContext) {
-      // Get token from cookie
-
       // Initialize headers if not exists
       if (!options.headers) {
         options.headers = new Headers();
@@ -108,7 +143,13 @@ export const createClient = (config: ClientConfig = {}): HttpClient => {
       // Convert headers to Headers object if needed
       const headerObj = new Headers(options.headers as HeadersInit);
 
-      // Merge custom headers
+      // Auto-add Accept-Language header if enabled and not already set
+      if (autoLocale && !headerObj.has("Accept-Language")) {
+        const locale = getLocaleFromCookies();
+        headerObj.set("Accept-Language", locale);
+      }
+
+      // Merge custom headers (these will override auto-detected locale if provided)
       const customHeaders = new Headers(headers);
       customHeaders.forEach((value, key) => {
         headerObj.set(key, value);

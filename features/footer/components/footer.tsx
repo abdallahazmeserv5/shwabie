@@ -7,17 +7,20 @@ import StoresButtons from "./stores-button";
 import { useQuery } from "@tanstack/react-query";
 import { SiteSettingsQuery } from "@/features/shared/query-options";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const Footer = () => {
+  const t = useTranslations();
   const { data } = useQuery(SiteSettingsQuery);
+
   const footerLinks = {
     company: {
-      title: "الشركة",
+      title: t("company"),
       links: [
-        { title: "من نحن", href: "/aboutus" },
-        { title: "تواصل معنا", href: "/contactus" },
-        { title: "الشقق", href: "/properties" },
-        { title: "المقالات", href: "/blogs" },
+        { title: t("about_us"), href: "/aboutus" },
+        { title: t("contact_us"), href: "/contactus" },
+        { title: t("properties"), href: "/properties" },
+        { title: t("blogs"), href: "/blogs" },
       ],
     },
   };
@@ -26,25 +29,17 @@ const Footer = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
+      transition: { staggerChildren: 0.1 },
     },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-      },
-    },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   return (
-    <footer className=" mt-10">
+    <footer className="mt-10">
       <div className="container mx-auto px-6 py-12">
         <motion.div
           variants={containerVariants}
@@ -58,11 +53,9 @@ const Footer = () => {
             variants={itemVariants}
             className="space-y-6 col-span-2 md:col-span-1"
           >
-            {/* Logo */}
             <Logo />
 
-            {/* Description */}
-            <p className="text-sm text-gray-600 text-right leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               {data?.data.site_name}
             </p>
 
@@ -77,7 +70,6 @@ const Footer = () => {
                 {
                   Icon: Twitter,
                   color: "hover:bg-sky-500",
-
                   href: data?.data.twitter_url,
                 },
                 {
@@ -92,8 +84,8 @@ const Footer = () => {
                 },
               ].map(({ Icon, color, href }, index) => (
                 <motion.a
-                  target="_blank"
                   key={index}
+                  target="_blank"
                   href={href}
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.95 }}
@@ -112,7 +104,7 @@ const Footer = () => {
               variants={itemVariants}
               className="space-y-4"
             >
-              <h3 className="text-base font-bold text-gray-900 text-right">
+              <h3 className="text-base font-bold text-gray-900">
                 {section.title}
               </h3>
               <ul className="space-y-3">
@@ -124,7 +116,7 @@ const Footer = () => {
                   >
                     <Link
                       href={link.href}
-                      className="text-sm text-gray-600 hover:text-emerald-500 transition-colors duration-300 block text-right"
+                      className="text-sm text-gray-600 hover:text-emerald-500 transition-colors duration-300 block"
                     >
                       {link.title}
                     </Link>
@@ -136,10 +128,10 @@ const Footer = () => {
 
           {/* Contact Section */}
           <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-base font-bold text-gray-900 text-right">
-              معلومات التواصل
+            <h3 className="text-base font-bold text-gray-900">
+              {t("contact_info")}
             </h3>
-            <div className="space-y-3 text-right">
+            <div className="space-y-3">
               <p className="text-sm text-gray-600">{data?.data.site_address}</p>
               <p className="text-sm text-gray-600" dir="ltr">
                 {data?.data.site_phone}
@@ -148,7 +140,7 @@ const Footer = () => {
                 href={`mailto:${data?.data.site_email}`}
                 className="text-sm text-emerald-500 hover:text-emerald-600 transition-colors duration-300 block"
               >
-                البريد الإلكتروني للتواصل
+                {t("email_contact")}
               </a>
             </div>
           </motion.div>

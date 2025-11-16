@@ -17,7 +17,7 @@ import {
 import Triangle from "@/features/shared/components/triangle";
 import { useQuery } from "@tanstack/react-query";
 import Autoplay from "embla-carousel-autoplay";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams, useRouter } from "next/navigation";
 import * as React from "react";
 import Breadcrumb from "./breadcrumb";
@@ -28,16 +28,17 @@ export default function Properties({
   secondary?: boolean;
 }) {
   const [favorites, setFavorites] = useState<number[]>([]);
-  const dir = useLocale() === "ar" ? "rtl" : "ltr";
+  const locale = useLocale();
+  const t = useTranslations(); // flat keys
+  const dir = locale === "ar" ? "rtl" : "ltr";
+
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Fetch properties with current URL params
+  // Fetch
   const { data, isLoading, error } = useQuery(
     PropertiesDataQuery(searchParams)
   );
-
-  // Fetch filters metadata
   const { data: filtersData } = useQuery(FiltersDataQuery);
 
   const properties = data?.data || [];
@@ -59,26 +60,17 @@ export default function Properties({
     router.push(`?${params.toString()}`, { scroll: true });
   };
 
-  // For carousel view (non-secondary)
+  // Carousels
   const half = Math.round((properties.length || 0) / 2);
   const firstRow = properties.slice(0, half);
   const secondRow = properties.slice(half);
 
-  // Embla autoplay plugin (different directions)
   const firstPluginForward = React.useRef(
-    Autoplay({
-      delay: 2500,
-      stopOnInteraction: false,
-      stopOnMouseEnter: false,
-    })
+    Autoplay({ delay: 2500, stopOnInteraction: false, stopOnMouseEnter: false })
   );
 
   const secondPluginForward = React.useRef(
-    Autoplay({
-      delay: 2500,
-      stopOnInteraction: false,
-      stopOnMouseEnter: false,
-    })
+    Autoplay({ delay: 2500, stopOnInteraction: false, stopOnMouseEnter: false })
   );
 
   return (
@@ -88,18 +80,22 @@ export default function Properties({
           {secondary && (
             <Breadcrumb
               items={[
-                { title: "الرئيسية", href: "/" },
-                { title: "العقارات", href: "/properties" },
+                { title: t("home"), href: "/" },
+                { title: t("propertiesTitle"), href: "/properties" },
               ]}
             />
           )}
+
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            <span className="text-primary mx-2 inline-block">عقارات</span>
-            منتقاة بعناية
+            <span className="text-primary mx-2 inline-block">
+              {t("propertiesTitle")}
+            </span>
+            {t("carefullySelected")}
           </h2>
+
           {!secondary && (
             <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
-              اختر من بين مئات العقارات المتاحة في أفضل المواقع
+              {t("chooseFromHundreds")}
             </p>
           )}
         </div>
@@ -110,33 +106,28 @@ export default function Properties({
 
         {secondary && <PropertyFilterForm filters={filters} />}
 
-        {/* Loading State */}
         {isLoading && (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            <p className="mt-4 text-gray-600">جاري تحميل العقارات...</p>
+            <p className="mt-4 text-gray-600">{t("loading")}</p>
           </div>
         )}
 
-        {/* Error State */}
         {error && (
           <div className="text-center py-12">
-            <p className="text-red-600">حدث خطأ في تحميل العقارات</p>
+            <p className="text-red-600">{t("error")}</p>
           </div>
         )}
 
-        {/* No Results */}
         {!isLoading && !error && properties.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-600">لا توجد عقارات متاحة</p>
+            <p className="text-gray-600">{t("noResults")}</p>
           </div>
         )}
 
-        {/* Properties Display */}
         {!isLoading && !error && properties.length > 0 && (
           <>
             {secondary ? (
-              // Grid View for secondary (properties page)
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
                 {properties.map((property) => (
                   <PropertyCard
@@ -148,15 +139,9 @@ export default function Properties({
                 ))}
               </div>
             ) : (
-              // Carousel View for homepage
               <>
-                {/* Row 1 Carousel */}
                 <Carousel
-                  opts={{
-                    align: "center",
-                    loop: true,
-                    direction: dir,
-                  }}
+                  opts={{ align: "center", loop: true, direction: dir }}
                   plugins={[firstPluginForward.current]}
                   className="mt-6"
                 >
@@ -176,28 +161,25 @@ export default function Properties({
                   </CarouselContent>
                 </Carousel>
 
-                {/* Row 2 Carousel (opposite direction) */}
                 <Carousel
                   dir="ltr"
-                  opts={{
-                    align: "center",
-                    loop: true,
-                    direction: "ltr",
-                  }}
+                  opts={{ align: "center", loop: true, direction: "ltr" }}
                   plugins={[secondPluginForward.current]}
                   className="mt-8"
                 >
-                  <CarouselContent className="-ml-4 py-2 text-end">
+                  <CarouselContent className="-ml-4 py-2">
                     {secondRow.map((property) => (
                       <CarouselItem
                         key={property.id}
                         className="pl-4 basis-3/4 sm:basis-1/2 md:basis-1/3 xl:basis-1/4"
                       >
-                        <PropertyCard
-                          property={property}
-                          isFavorite={favorites.includes(property.id)}
-                          toggleFavorite={toggleFavorite}
-                        />
+                        <div dir={dir}>
+                          <PropertyCard
+                            property={property}
+                            isFavorite={favorites.includes(property.id)}
+                            toggleFavorite={toggleFavorite}
+                          />
+                        </div>
                       </CarouselItem>
                     ))}
                   </CarouselContent>
@@ -207,7 +189,6 @@ export default function Properties({
           </>
         )}
 
-        {/* Pagination - Only show in secondary (grid) view */}
         {secondary && !isLoading && properties.length > 0 && (
           <Pagnation
             currentPage={currentPage}

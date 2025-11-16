@@ -30,23 +30,23 @@ export default function Features() {
   const features = [
     {
       icon: "/home/money-icon.png",
-      title: t("feature1_title"),
-      description: t("feature1_description"),
+      title: t("feature1Title"),
+      description: t("feature1Description"),
     },
     {
       icon: "/home/location-icon.png",
-      title: t("feature2_title"),
-      description: t("feature2_description"),
+      title: t("feature2Title"),
+      description: t("feature2Description"),
     },
     {
       icon: "/home/money-icon.png",
-      title: t("feature3_title"),
-      description: t("feature3_description"),
+      title: t("feature3Title"),
+      description: t("feature3Description"),
     },
     {
       icon: "/home/sales-icon.png",
-      title: t("feature4_title"),
-      description: t("feature4_description"),
+      title: t("feature4Title"),
+      description: t("feature4Description"),
     },
   ];
 
@@ -55,14 +55,14 @@ export default function Features() {
       <div className="flex items-center flex-col md:flex-row  sm:gap-10">
         {/* ===== Title for Small Screen ===== */}
         <h2 className="text-3xl font-bold text-gray-900 mb-2 flex sm:hidden text-nowrap flex-wrap text-center">
-          {t("features_title")}
+          {t("featuresTitle")}
           <span className="text-2xl font-bold text-emerald-700 mb-4 ms-2">
-            {t("features_subtitle")}
+            {t("featuresSubtitle")}
           </span>
         </h2>
 
         {/* ===== Right Highlight Card (Desktop) ===== */}
-        <Card className="relative p-10 hidden sm:block bg-emerald-50 rounded-3xl shadow-none flex-1 overflow-hidden h-[500px] text-right">
+        <Card className="relative p-10 hidden sm:block bg-emerald-50 rounded-3xl shadow-none flex-1 overflow-hidden h-[500px]  ">
           <div className="absolute inset-0">
             <ImageFallback
               src="/home/home-image-bg.webp"
@@ -74,18 +74,18 @@ export default function Features() {
 
           <div className="relative z-10 flex flex-col">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              {t("features_title")}
+              {t("featuresTitle")}
             </h2>
 
             <h3 className="text-2xl font-bold text-emerald-700 mb-4">
-              {t("features_subtitle")}
+              {t("featuresSubtitle")}
             </h3>
 
             <p className="text-gray-600 mb-6 leading-relaxed">
-              {t("features_description")}
+              {t("featuresDescription")}
             </p>
 
-            <Button>{t("browse_properties")}</Button>
+            <Button>{t("browseProperties")}</Button>
           </div>
         </Card>
 
@@ -109,7 +109,7 @@ export default function Features() {
                 show: { opacity: 1, y: 0 },
               }}
             >
-              <Card className="p-6 border rounded-xl shadow-sm hover:shadow-md transition bg-white text-right flex gap-4">
+              <Card className="p-6 border rounded-xl shadow-sm hover:shadow-md transition bg-white  flex gap-4">
                 <div className="flex sm:flex-col items-center gap-2">
                   <div className="size-16 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
                     <ImageFallback
@@ -151,7 +151,7 @@ export default function Features() {
                   key={index}
                   className="pl-4 basis-full sm:basis-1/2"
                 >
-                  <Card className="p-6 border rounded-xl shadow-sm hover:shadow-md transition bg-white text-right flex gap-4">
+                  <Card className="p-6 border rounded-xl shadow-sm hover:shadow-md transition bg-white   flex gap-4">
                     <div className="flex items-center gap-4">
                       <div className="size-16 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
                         <ImageFallback

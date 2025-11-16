@@ -4,9 +4,7 @@ import { motion } from "framer-motion";
 export default function StoresButtons() {
   return (
     <div className="space-y-2 col-span-2 md:col-span-1">
-      <p className="text-sm font-medium text-gray-700 text-right mb-3">
-        تحميل التطبيق
-      </p>
+      <p className="text-sm font-medium text-gray-700   mb-3">تحميل التطبيق</p>
       <motion.button
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
@@ -18,7 +16,7 @@ export default function StoresButtons() {
           width={20}
           height={26}
         />
-        <div className="text-right">
+        <div className=" ">
           <div className="text-xs">Download on the</div>
           <div className="text-sm font-semibold">Apple Store</div>
         </div>
@@ -36,7 +34,7 @@ export default function StoresButtons() {
           height={26}
           className="size-[26px]"
         />
-        <div className="text-right">
+        <div className=" ">
           <div className="text-xs">GET IT ON</div>
           <div className="text-sm font-semibold">Google Play</div>
         </div>

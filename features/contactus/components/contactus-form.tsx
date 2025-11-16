@@ -19,6 +19,8 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useQuery } from "@tanstack/react-query";
+import { SiteSettingsQuery } from "@/features/shared/query-options";
 
 const LocationMap = dynamic(
   () => import("@/features/properties/components/property-location"),
@@ -41,6 +43,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function ContactusForm() {
+  const { data } = useQuery(SiteSettingsQuery);
+
   const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -61,9 +65,9 @@ export default function ContactusForm() {
 العنوان: ${values.address}
 المدينة: ${values.city}`;
 
-    const whatsappUrl = `https://wa.me/+966123456?text=${encodeURIComponent(
-      message
-    )}`;
+    const whatsappUrl = `https://wa.me/${
+      data?.data.site_phone || ""
+    }?text==${encodeURIComponent(message)}`;
     router.push(whatsappUrl);
     form.reset();
   };
@@ -118,10 +122,10 @@ export default function ContactusForm() {
             viewport={{ once: true }}
           >
             <div>
-              <h2 className="text-2xl font-bold text-right mb-4">
+              <h2 className="text-2xl font-bold  mb-4">
                 تواصل معنا علي مدار اليوم{" "}
               </h2>
-              <p className="text-sm text-gray-600 text-right mb-6">
+              <p className="text-sm text-gray-600   mb-6">
                 من فضلك قم بكتابة البيانات التالية{" "}
               </p>
             </div>
@@ -134,13 +138,11 @@ export default function ContactusForm() {
                     name="fullName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-right block">
-                          الاسم الكامل
-                        </FormLabel>
+                        <FormLabel className="  block">الاسم الكامل</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="اكتب اسمك الكامل"
-                            className="text-right"
+                            className=" "
                             {...field}
                           />
                         </FormControl>
@@ -154,13 +156,11 @@ export default function ContactusForm() {
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-right block">
-                          رقم الهاتف
-                        </FormLabel>
+                        <FormLabel className="  block">رقم الهاتف</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="اكتب رقمك"
-                            className="text-right"
+                            className=" "
                             {...field}
                           />
                         </FormControl>
@@ -175,14 +175,14 @@ export default function ContactusForm() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-right block">
+                      <FormLabel className=" block">
                         البريد الإلكتروني
                       </FormLabel>
                       <FormControl>
                         <Input
                           type="email"
                           placeholder="example@gmail.com"
-                          className="text-right"
+                          className=" "
                           {...field}
                         />
                       </FormControl>
@@ -196,13 +196,11 @@ export default function ContactusForm() {
                   name="address"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-right block">
-                        العنوان
-                      </FormLabel>
+                      <FormLabel className="  block">العنوان</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="اكتب عنوانك بالتفصيل"
-                          className="text-right"
+                          className=" "
                           {...field}
                         />
                       </FormControl>
@@ -216,13 +214,11 @@ export default function ContactusForm() {
                   name="city"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-right block">
-                        المدينة
-                      </FormLabel>
+                      <FormLabel className="  block">المدينة</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="اكتب مدينتك"
-                          className="text-right"
+                          className=" "
                           {...field}
                         />
                       </FormControl>

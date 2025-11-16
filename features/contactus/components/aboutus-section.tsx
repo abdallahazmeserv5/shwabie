@@ -7,10 +7,13 @@ import FeaturesSection from "./features";
 import Breadcrumb from "@/components/breadcrumb";
 import Triangle from "@/features/shared/components/triangle";
 import { AboutUs } from "@/app/(pages)/aboutus/page";
+import { useTranslations } from "next-intl";
 
 export default function AboutusSection({ data }: { data: AboutUs }) {
+  const t = useTranslations();
+
   return (
-    <section className="pt-8 container px-4 mx-auto  ">
+    <section className="pt-8 container px-4 mx-auto">
       {/* Triangle Background */}
       <Triangle>
         <div
@@ -20,8 +23,8 @@ export default function AboutusSection({ data }: { data: AboutUs }) {
         >
           <Breadcrumb
             items={[
-              { title: "الرئيسية", href: "/" },
-              { title: "من نحن", href: "/aboutus" },
+              { title: t("home"), href: "/" },
+              { title: t("about_us"), href: "/aboutus" },
             ]}
           />
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary drop-shadow-2xl">
@@ -29,8 +32,9 @@ export default function AboutusSection({ data }: { data: AboutUs }) {
           </h2>
         </div>
       </Triangle>
+
       <motion.div
-        className="rounded-none overflow-y-auto bg-white border border-gray-200  "
+        className="rounded-none overflow-y-auto bg-white border border-gray-200"
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -39,7 +43,7 @@ export default function AboutusSection({ data }: { data: AboutUs }) {
         <div className="flex gap-5">
           {/* Right side - Map */}
           <motion.div
-            className="hidden relative md:block h-[550px] object-cover  flex-1 w-full  "
+            className="hidden relative md:block h-[550px] object-cover flex-1 w-full"
             initial={{ x: 100, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -56,13 +60,11 @@ export default function AboutusSection({ data }: { data: AboutUs }) {
             viewport={{ once: true }}
           >
             <div className="pt-10">
-              <h2 className="text-2xl font-bold text-right mb-4 max-w-[378px]">
-                نجد أفضل الحلول
-                <span className="text-primary">العقارية</span>
-                لك ولعائلتك
+              <h2 className="text-2xl font-bold mb-4 max-w-[378px]">
+                {t("best_real_estate_solutions")}
               </h2>
-              <p className="text-sm text-gray-600 text-right mb-6">
-                عقارات متنوعة وبضمان عالي من عملائنا
+              <p className="text-sm text-gray-600 mb-6">
+                {t("diverse_properties_guaranteed")}
               </p>
             </div>
 

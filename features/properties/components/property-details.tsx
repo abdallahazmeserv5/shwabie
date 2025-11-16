@@ -34,9 +34,7 @@ export default function PropertyDetails({ property }: { property: Property }) {
       <motion.div variants={cardVariants} transition={{ delay: 0.1 }}>
         <Card className="gap-2">
           <CardHeader>
-            <CardTitle className="text-xl font-bold text-right">
-              تفاصيل العقار
-            </CardTitle>
+            <CardTitle className="text-xl font-bold  ">تفاصيل العقار</CardTitle>
           </CardHeader>
 
           <CardContent className="pt-2">

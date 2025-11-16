@@ -122,10 +122,10 @@ export default function FastBuyingDialog({
           {/* Left side - Form */}
           <div className="max-w-[80%] mx-auto">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold text-right mb-4">
+              <DialogTitle className="text-2xl font-bold   mb-4">
                 حجز عقار سهل وعملي
               </DialogTitle>
-              <p className="text-sm text-gray-600 text-right mb-6">
+              <p className="text-sm text-gray-600   mb-6">
                 من خلال تعبئة النموذج أدناه وسنتواصل معك
               </p>
             </DialogHeader>
@@ -140,15 +140,9 @@ export default function FastBuyingDialog({
                   name="customer_name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-right block">
-                        الاسم الكامل
-                      </FormLabel>
+                      <FormLabel className="  block">الاسم الكامل</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="اكتب اسمك الكامل"
-                          className="text-right"
-                          {...field}
-                        />
+                        <Input placeholder="اكتب اسمك الكامل" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -160,13 +154,11 @@ export default function FastBuyingDialog({
                   name="customer_mobile"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-right block">
-                        رقم الهاتف
-                      </FormLabel>
+                      <FormLabel className=" block">رقم الهاتف</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="01066689891"
-                          className="text-right"
+                          className=" "
                           {...field}
                         />
                       </FormControl>

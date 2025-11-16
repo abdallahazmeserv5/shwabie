@@ -12,6 +12,7 @@ import type React from "react";
 import "./globals.css";
 import Providers from "./providers";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import WhatsAppButton from "@/features/shared/components/whats-app-button";
 
 const _alexandra = Alexandria({
   subsets: ["latin", "arabic"],
@@ -43,6 +44,7 @@ export default async function RootLayout({
               {children}
               <Footer />
               <ReactQueryDevtools initialIsOpen={false} />
+              <WhatsAppButton />
             </HydrationBoundary>
           </Providers>
         </NextIntlClientProvider>

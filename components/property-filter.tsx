@@ -5,8 +5,10 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Key, ReceiptCent, Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function PropertyFilter() {
+  const t = useTranslations(); // flat translation keys
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -62,7 +64,7 @@ export default function PropertyFilter() {
         />
         <Input
           type="text"
-          placeholder="ابحث عن عقار..."
+          placeholder={t("searchPlaceholder")} // translated
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pr-10 h-12 border-gray-200 focus:border-primary"
@@ -80,7 +82,7 @@ export default function PropertyFilter() {
             value="rent"
             className="rounded-lg text-base text-[#100A55] data-[state=active]:border-2 data-[state=active]:border-primary data-[state=active]:text-primary"
           >
-            إيجار
+            {t("rent")}
             <Key className="mr-1" />
           </TabsTrigger>
 
@@ -88,7 +90,7 @@ export default function PropertyFilter() {
             value="sell"
             className="rounded-lg text-base text-[#100A55] data-[state=active]:border-2 data-[state=active]:border-primary data-[state=active]:text-primary"
           >
-            بيع
+            {t("sell")}
             <ReceiptCent className="mr-1" />
           </TabsTrigger>
         </TabsList>

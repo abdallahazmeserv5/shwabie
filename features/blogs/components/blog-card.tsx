@@ -91,7 +91,7 @@ export default function BlogCard({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 + 0.5 }}
-              className="text-xl line-clamp-2 min-h-[70px] font-bold text-gray-900 leading-relaxed text-right group-hover:text-emerald-600 transition-colors duration-300"
+              className="text-xl line-clamp-2 min-h-[70px] font-bold text-gray-900 leading-relaxed  group-hover:text-emerald-600 transition-colors duration-300"
             >
               {article.title}
             </motion.h3>
@@ -102,7 +102,7 @@ export default function BlogCard({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 + 0.6 }}
-              className="text-gray-600 text-sm mt-2 line-clamp-3 text-right min-h-[60px]"
+              className="text-gray-600 text-sm mt-2 line-clamp-3   min-h-[60px]"
             >
               {article.content}
             </motion.p>

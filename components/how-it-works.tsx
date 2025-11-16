@@ -11,10 +11,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useLocale } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 // Placeholder for ImageFallback component
 const ImageFallback = ({ src, alt, width, height, className }: any) => (
@@ -31,36 +29,35 @@ const ImageFallback = ({ src, alt, width, height, className }: any) => (
 const steps = [
   {
     number: "01",
-    title: "ملء بيانات سريع",
+    titleKey: "step1Title",
     image: "/home/house.png",
-    description:
-      "قطاع حيوي يجمع بين الاستثمار المربح وتوفير العوامل الآمنة، ويشمل أنواعاً متعددة كالعقارات السكنية والتجارية مع تحديد الأسعار والإجراءات المعتمدة",
+    descriptionKey: "step1Description",
+    highlighted: false,
   },
   {
     number: "02",
-    title: "اختيار العقار",
+    titleKey: "step2Title",
     image: "/home/note.png",
-    description:
-      "قطاع حيوي يجمع بين الاستثمار المربح وتوفير العوامل الآمنة، ويشمل أنواعاً متعددة كالعقارات السكنية مع تحديد الأسعار والإجراءات المعتمدة",
+    descriptionKey: "step2Description",
     highlighted: true,
   },
   {
     number: "03",
-    title: "معاينة العقار",
+    titleKey: "step3Title",
     image: "/home/video.png",
-    description:
-      "قطاع حيوي يجمع بين الاستثمار المربح وتوفير العوامل الآمنة ويشمل أنواعاً متعددة كالعقارات السكنية والتجارية مع تحديد الأسعار والإجراءات المعتمدة",
+    descriptionKey: "step3Description",
+    highlighted: false,
   },
 ];
 
 const stats = [
-  { label: "نسبة الشفوي", value: 7265, change: "+11.01%" },
-  { label: "عدد الزيارات اليوم", value: 3671, change: "-0.03%" },
-  { label: "عملية بيع وشراء", value: 156, change: "+15.03%" },
-  { label: "عملية تحويل يومية", value: 2318, change: "+0.06%" },
+  { labelKey: "stat1Label", value: 7265, changeKey: "stat1Change" },
+  { labelKey: "stat2Label", value: 3671, changeKey: "stat2Change" },
+  { labelKey: "stat3Label", value: 156, changeKey: "stat3Change" },
+  { labelKey: "stat4Label", value: 2318, changeKey: "stat4Change" },
 ];
 
-// Enhanced Counter component with proper motion animation
+// Counter component
 const Counter = ({ value }: { value: number }) => {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.floor(latest));
@@ -71,7 +68,6 @@ const Counter = ({ value }: { value: number }) => {
       duration: 2.5,
       ease: [0.16, 1, 0.3, 1],
     });
-
     return controls.stop;
   }, [count, value]);
 
@@ -81,7 +77,6 @@ const Counter = ({ value }: { value: number }) => {
         ref.current.textContent = latest.toLocaleString();
       }
     });
-
     return () => unsubscribe();
   }, [rounded]);
 
@@ -100,13 +95,14 @@ const Counter = ({ value }: { value: number }) => {
 };
 
 export default function HowItWorks() {
+  const t = useTranslations(); // flat translations
   const dir = useLocale() === "ar" ? "rtl" : "ltr";
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
 
   return (
-    <section className="py-10  bg-linear-to-br from-[#12B674] to-[#134732] text-white">
+    <section className="py-10 bg-linear-to-br from-[#12B674] to-[#134732] text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -117,24 +113,22 @@ export default function HowItWorks() {
           className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-8 gap-6 lg:gap-0"
         >
           <motion.h2
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: -30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-3xl sm:text-4xl font-bold max-w-[444px]"
           >
-            طريقة عملنا سهلة وعملية
+            {t("howItWorksTitle")}
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-white max-w-[866px]"
           >
-            تشمل العقارات الأراضي والتحسينات التي تُبنى عليها، مثل المنازل
-            والمباني التجارية وغيرها. هناك أيضًا تصنيفات مختلفة للعقارات مثل
-            المساكن المتصلة، والفيوفية، والبحرية (تخضع للأسعار)، حسب سِكناها.
+            {t("howItWorksDescription")}
           </motion.p>
         </motion.div>
 
@@ -175,7 +169,7 @@ export default function HowItWorks() {
                     <Card
                       className={cn(
                         `p-6 text-center backdrop-blur transition-all duration-300 bg-white/20 border-white/30 hover:shadow-2xl hover:bg-white/30 h-full`,
-                        index === 0 &&
+                        step.highlighted &&
                           "bg-white text-emerald-800 border border-white hover:shadow-2xl hover:bg-white"
                       )}
                     >
@@ -198,7 +192,7 @@ export default function HowItWorks() {
                             }}
                           >
                             <ImageFallback
-                              alt={step.title}
+                              alt={t(step.titleKey)}
                               width={64}
                               height={64}
                               src={step.image}
@@ -206,8 +200,8 @@ export default function HowItWorks() {
                             />
                           </motion.div>
                           <motion.h3
-                            initial={{ x: -20, opacity: 0 }}
-                            whileInView={{ x: 0, opacity: 1 }}
+                            initial={{ y: -20, opacity: 0 }}
+                            whileInView={{ y: 0, opacity: 1 }}
                             viewport={{ once: true }}
                             transition={{
                               duration: 0.6,
@@ -216,10 +210,10 @@ export default function HowItWorks() {
                             }}
                             className={cn(
                               "text-xl font-bold",
-                              index === 0 ? "text-[#000929]" : "text-white"
+                              step.highlighted ? "text-[#000929]" : "text-white"
                             )}
                           >
-                            {step.title}
+                            {t(step.titleKey)}
                           </motion.h3>
                         </div>
                         <motion.div
@@ -247,10 +241,10 @@ export default function HowItWorks() {
                           delay: index * 0.15 + 0.5,
                         }}
                         className={
-                          index === 0 ? "text-[#000929]" : "text-white"
+                          step.highlighted ? "text-[#000929]" : "text-white"
                         }
                       >
-                        {step.description}
+                        {t(step.descriptionKey)}
                       </motion.p>
                     </Card>
                   </motion.div>
@@ -291,12 +285,12 @@ export default function HowItWorks() {
                 transition={{ duration: 0.5, delay: i * 0.1 + 0.2 }}
                 className="text-sm mt-1"
               >
-                {stat.label}
+                {t(stat.labelKey)}
               </motion.p>
               <div className="flex gap-4 items-center justify-between">
                 <motion.p
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: -10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 + 0.3 }}
                   className="text-xs flex items-center justify-center mt-1"
@@ -312,7 +306,7 @@ export default function HowItWorks() {
                   >
                     <ArrowUp className="w-3 h-3 mr-1" />
                   </motion.span>
-                  {stat.change}
+                  {t(stat.changeKey)}
                 </motion.p>
                 <Counter value={stat.value} />
               </div>

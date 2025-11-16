@@ -2,14 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import ImageFallback from "./image-fallback";
 import Link from "next/link";
+import { useDirection } from "@/hooks/use-direction";
 
 export default function Hero() {
   const t = useTranslations();
   const dots = Array.from({ length: 10 });
+  const { isRtl } = useDirection();
 
   return (
     <section className="relative overflow-hidden h-[calc(80vh-83.75px)] md:h-[calc(100vh-124px)] text-white">
@@ -51,7 +53,7 @@ export default function Hero() {
 
       <div className="relative flex flex-col-reverse lg:flex-row items-center justify-center h-full">
         <motion.div
-          className="relative flex-1 w-full h-[350px] sm:h-[400px] lg:h-[500px] 2xl:h-[795px] hidden lg:block"
+          className="relative flex-1 ltr:-scale-x-100 w-full h-[350px] sm:h-[400px] lg:h-[500px] 2xl:h-[795px] hidden lg:block"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
@@ -65,7 +67,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-          className="space-y-6 z-10 flex-1 text-center lg:text-right max-w-6xl px-4 pt-10"
+          className="space-y-6 z-10 flex-1 text-center lg:text-start max-w-6xl px-4 pt-10"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
@@ -85,7 +87,11 @@ export default function Hero() {
                 <span>{t("browseProperties")}</span>
               </Link>
             </Button>
-            <ChevronLeft className=" " size={20} />
+            {isRtl ? (
+              <ChevronLeft className="" size={20} />
+            ) : (
+              <ChevronRight className="" size={20} />
+            )}
           </div>
         </motion.div>
       </div>

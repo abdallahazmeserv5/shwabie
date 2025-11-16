@@ -1,5 +1,7 @@
 import ImageFallback from "@/components/image-fallback";
 import { Testimonial } from "@/features/shared/types";
+import { useDirection } from "@/hooks/use-direction";
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
@@ -10,6 +12,7 @@ export default function TestimonialsCard({
   testimonial: Testimonial;
   index: number;
 }) {
+  const { isRtl } = useDirection();
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -30,7 +33,7 @@ export default function TestimonialsCard({
           whileInView={{ scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: index * 0.1 + 0.3, type: "spring" }}
-          className="absolute top-8 left-8"
+          className={cn("absolute top-8 end-8 ", !isRtl && "-scale-x-100")}
         >
           <ImageFallback
             src={"/quote.png"}
@@ -47,7 +50,7 @@ export default function TestimonialsCard({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: index * 0.1 + 0.4 }}
-          className="text-xl font-bold text-gray-900 mb-4 text-right pt-4"
+          className="text-xl font-bold text-gray-900 mb-4   pt-4"
         >
           {testimonial.name}
         </motion.h3>
@@ -58,7 +61,7 @@ export default function TestimonialsCard({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: index * 0.1 + 0.5 }}
-          className="text-gray-600 leading-relaxed text-right text-sm mb-8 grow line-clamp-5 min-h-[115px]"
+          className="text-gray-600 leading-relaxed   text-sm mb-8 grow line-clamp-5 min-h-[115px]"
         >
           {testimonial.description}
         </motion.p>
